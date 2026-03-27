@@ -1,0 +1,11 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*.pyc
+*.egg-info/
+.env
+*.pt
+checkpoints/*
+!checkpoints/.gitkeep
+data/final/*
+!data/final/.gitkeep
