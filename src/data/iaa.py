@@ -28,6 +28,8 @@ def iaa_report(path_a: str, path_b: str) -> dict:
     labels_a, labels_b = load_annotations(path_a, path_b)
     kappa = compute_cohens_kappa(labels_a, labels_b)
     agreed = sum(a == b for a, b in zip(labels_a, labels_b))
+    if len(labels_a) == 0:
+        raise ValueError("No common IDs found between the two annotation files.")
     return {
         "n_samples": len(labels_a),
         "agreement_rate": agreed / len(labels_a),

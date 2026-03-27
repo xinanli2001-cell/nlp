@@ -11,47 +11,76 @@ import argparse
 import csv
 import sys
 import torch
+from torch.utils.data import DataLoader
 
 from src.data.dataset import ID2LABEL, load_csv
 from src.models.baseline import RuleBasedABSA
 
+DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
 
-def load_bert(model_name: str, device: str):
-    if model_name == "bert":
-        from src.models.bert_absa import BertABSA
-        from src.data.dataset import ABSADataset
-        model = BertABSA().to(device)
-        model.load_state_dict(torch.load("checkpoints/bert_absa_best.pt", map_location=device))
-        return model, ABSADataset
-    elif model_name == "extended":
-        from src.models.extended_bert import ExtendedBertABSA
-        from src.data.extended_dataset import ExtendedABSADataset
-        model = ExtendedBertABSA().to(device)
-        model.load_state_dict(torch.load("checkpoints/extended_bert_best.pt", map_location=device))
-        return model, ExtendedABSADataset
-    else:
-        raise ValueError(f"Unknown model: {model_name}. Choose: baseline, bert, extended")
+# Module-level cache: model loaded once per process
+_model_cache: dict = {}
+_baseline_cache = None
+
+
+def _get_baseline() -> RuleBasedABSA:
+    global _baseline_cache
+    if _baseline_cache is None:
+        _baseline_cache = RuleBasedABSA()
+    return _baseline_cache
+
+
+def _get_bert(model_name: str):
+    if model_name not in _model_cache:
+        if model_name == "bert":
+            from src.models.bert_absa import BertABSA
+            from src.data.dataset import ABSADataset
+            model = BertABSA().to(DEVICE)
+            model.load_state_dict(torch.load("checkpoints/bert_absa_best.pt", map_location=DEVICE))
+            _model_cache[model_name] = (model, ABSADataset)
+        elif model_name == "extended":
+            from src.models.extended_bert import ExtendedBertABSA
+            from src.data.extended_dataset import ExtendedABSADataset
+            model = ExtendedBertABSA().to(DEVICE)
+            model.load_state_dict(torch.load("checkpoints/extended_bert_best.pt", map_location=DEVICE))
+            _model_cache[model_name] = (model, ExtendedABSADataset)
+        else:
+            raise ValueError(f"Unknown model: {model_name}. Choose: baseline, bert, extended")
+    return _model_cache[model_name]
 
 
 def predict_single(review: str, aspect: str, model_name: str) -> str:
-    device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
     if model_name == "baseline":
-        return RuleBasedABSA().predict(review, aspect)
+        return _get_baseline().predict(review, aspect)
 
-    model, DatasetClass = load_bert(model_name, device)
+    model, DatasetClass = _get_bert(model_name)
     model.eval()
-    from torch.utils.data import DataLoader
     ds = DatasetClass([{"review": review, "aspect": aspect, "sentiment": "positive"}])
     batch = next(iter(DataLoader(ds, batch_size=1)))
     with torch.no_grad():
-        logits = model(batch["input_ids"].to(device), batch["attention_mask"].to(device), batch["token_type_ids"].to(device))
+        logits = model(batch["input_ids"].to(DEVICE), batch["attention_mask"].to(DEVICE), batch["token_type_ids"].to(DEVICE))
     return ID2LABEL[logits.argmax(-1).item()]
 
 
 def predict_file(input_path: str, output_path: str, model_name: str) -> None:
     rows = load_csv(input_path)
-    for row in rows:
-        row["predicted"] = predict_single(row["review"], row["aspect"], model_name)
+    # Load model once, then run batch inference
+    if model_name == "baseline":
+        bl = _get_baseline()
+        for row in rows:
+            row["predicted"] = bl.predict(row["review"], row["aspect"])
+    else:
+        model, DatasetClass = _get_bert(model_name)
+        model.eval()
+        ds = DatasetClass(rows)
+        dl = DataLoader(ds, batch_size=32)
+        all_preds = []
+        with torch.no_grad():
+            for batch in dl:
+                logits = model(batch["input_ids"].to(DEVICE), batch["attention_mask"].to(DEVICE), batch["token_type_ids"].to(DEVICE))
+                all_preds += [ID2LABEL[i] for i in logits.argmax(-1).cpu().tolist()]
+        for row, pred in zip(rows, all_preds):
+            row["predicted"] = pred
     fieldnames = list(rows[0].keys())
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)

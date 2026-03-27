@@ -12,6 +12,7 @@ Error types:
 
 import re
 from collections import Counter, defaultdict
+from src.models.baseline import ASPECT_KEYWORDS
 
 SARCASM_PATTERNS  = [r"\bsure\b", r"\bgreat job\b", r"\bwonderful\b.*!", r"\bthanks a lot\b"]
 NEGATION_PATTERNS = [r"\bnot\b", r"\bnever\b", r"\bno\b", r"\bwon't\b", r"\bcan't\b", r"\bdon't\b"]
@@ -24,7 +25,10 @@ def _matches_any(text: str, patterns: list[str]) -> bool:
 def classify_error(review: str, aspect: str, gold: str, pred: str) -> str:
     """Return error type string for a single misclassified example."""
     words = review.split()
-    keywords_for_aspect = [aspect.lower().replace("_", " ")]
+    # Use full keyword list (same as baseline) for a fair implicit_aspect check
+    keywords_for_aspect = ASPECT_KEYWORDS.get(aspect.lower(), [aspect.lower().replace("_", " ")])
+    if not keywords_for_aspect:  # "overall" has empty list — treat as always present
+        keywords_for_aspect = [aspect.lower()]
     aspect_in_text = any(kw in review.lower() for kw in keywords_for_aspect)
 
     if not aspect_in_text:

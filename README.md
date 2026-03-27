@@ -9,6 +9,14 @@ pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 ```
 
+## Running Tests
+
+```bash
+pytest tests/ -v
+```
+
+No additional setup needed — `conftest.py` at the project root handles the import path automatically.
+
 ## Data
 
 Annotated dataset: 789 reviews with aspect-sentiment labels (positive/negative/neutral).
@@ -18,6 +26,8 @@ Annotated dataset: 789 reviews with aspect-sentiment labels (positive/negative/n
 python src/data/split.py
 
 # Inter-annotator agreement
+# Requires data/iaa_annotator2.csv — a second annotator's labels for ~100 rows
+# from data/reviews_need_check.csv (same format: id,sentiment columns)
 python src/data/iaa.py data/reviews_ok.csv data/iaa_annotator2.csv
 ```
 
