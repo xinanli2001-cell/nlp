@@ -1,0 +1,8 @@
+pandas==2.2.2
+spacy==3.7.4
+vaderSentiment==3.3.2
+transformers==4.40.2
+torch==2.3.0
+scikit-learn==1.4.2
+gradio==4.36.1
+pytest==8.2.2
