@@ -72,7 +72,13 @@ def predict_file(input_path: str, output_path: str, model_name: str) -> None:
     else:
         model, DatasetClass = _get_bert(model_name)
         model.eval()
-        ds = DatasetClass(rows)
+        # Reuse the training dataset for tokenization, but inference inputs
+        # may not carry gold sentiments.
+        inference_rows = [
+            {**row, "sentiment": row.get("sentiment", "positive")}
+            for row in rows
+        ]
+        ds = DatasetClass(inference_rows)
         dl = DataLoader(ds, batch_size=32)
         all_preds = []
         with torch.no_grad():
