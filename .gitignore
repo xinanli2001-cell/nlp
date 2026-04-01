@@ -9,3 +9,6 @@ checkpoints/*
 !checkpoints/.gitkeep
 data/final/*
 !data/final/.gitkeep
+archive/
+.claude/
+.pytest_cache/
