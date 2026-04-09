@@ -5,8 +5,10 @@ from torch.utils.data import DataLoader
 from src.models.baseline import RuleBasedABSA
 from src.models.bert_absa import BertABSA
 from src.models.extended_bert import ExtendedBertABSA
+from src.models.robertaabsa import RobertaABSA
 from src.data.dataset import ABSADataset, ID2LABEL, load_csv
 from src.data.extended_dataset import ExtendedABSADataset
+from src.data.roberta_dataset import RobertaABSADataset
 from src.evaluation.metrics import print_report
 from src.evaluation.error_analysis import analyse_errors
 
@@ -47,10 +49,24 @@ with torch.no_grad():
         golds2 += [ID2LABEL[i] for i in b["label"].cpu().tolist()]
 print_report(golds2, preds2, "Extended BERT ABSA")
 
+# --- RoBERTa ---
+rob = RobertaABSA().to(DEVICE)
+rob.load_state_dict(torch.load("checkpoints/roberta_absa_best.pt", map_location=DEVICE))
+rob.eval()
+test_dl3 = DataLoader(RobertaABSADataset(test_rows), batch_size=32)
+golds3, preds3 = [], []
+with torch.no_grad():
+    for b in test_dl3:
+        out = rob(b["input_ids"].to(DEVICE), b["attention_mask"].to(DEVICE))
+        preds3 += [ID2LABEL[i] for i in out.argmax(-1).cpu().tolist()]
+        golds3 += [ID2LABEL[i] for i in b["label"].cpu().tolist()]
+print_report(golds3, preds3, "RoBERTa ABSA")
+
 # Error analysis (requires src/evaluation/error_analysis.py — created in Task 9)
 try:
     analyse_errors(test_reviews, test_aspects, test_golds, bl_preds,  "Rule-Based Baseline")
     analyse_errors(test_reviews, test_aspects, golds,      preds,     "Standard BERT")
     analyse_errors(test_reviews, test_aspects, golds2,     preds2,    "Extended BERT")
+    analyse_errors(test_reviews, test_aspects, golds3,     preds3,    "RoBERTa")
 except ImportError:
     print("Error analysis module not yet available.")
