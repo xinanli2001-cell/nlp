@@ -1,0 +1,109 @@
+{
+  "project": {
+    "rows": 814,
+    "unique_ids": 789,
+    "sentiments": {
+      "positive": 714,
+      "negative": 58,
+      "neutral": 42
+    },
+    "aspects_top15": {
+      "overall": 278,
+      "usability": 229,
+      "performance": 63,
+      "screen": 54,
+      "price": 52,
+      "sound": 40,
+      "battery": 31,
+      "connectivity": 23,
+      "design": 19,
+      "build_quality": 17,
+      "camera": 8
+    }
+  },
+  "laptop": {
+    "rows": 2313,
+    "unique_ids": 1462,
+    "sentiments": {
+      "neutral": 460,
+      "positive": 987,
+      "negative": 866
+    },
+    "aspects_top15": {
+      "screen": 60,
+      "price": 56,
+      "use": 53,
+      "battery_life": 52,
+      "keyboard": 50,
+      "battery": 47,
+      "programs": 37,
+      "features": 35,
+      "software": 33,
+      "warranty": 31,
+      "windows": 30,
+      "hard_drive": 30,
+      "size": 24,
+      "quality": 23,
+      "performance": 23
+    }
+  },
+  "restaurant": {
+    "rows": 3602,
+    "unique_ids": 1978,
+    "sentiments": {
+      "negative": 805,
+      "positive": 2164,
+      "neutral": 633
+    },
+    "aspects_top15": {
+      "food": 360,
+      "service": 225,
+      "prices": 63,
+      "place": 59,
+      "dinner": 56,
+      "staff": 55,
+      "menu": 55,
+      "pizza": 51,
+      "atmosphere": 46,
+      "price": 41,
+      "table": 41,
+      "meal": 40,
+      "sushi": 37,
+      "drinks": 35,
+      "bar": 32
+    }
+  },
+  "train": {
+    "rows": 569,
+    "unique_ids": 567,
+    "sentiments": {
+      "positive": 499,
+      "negative": 40,
+      "neutral": 30
+    }
+  },
+  "val": {
+    "rows": 122,
+    "unique_ids": 107,
+    "sentiments": {
+      "positive": 107,
+      "negative": 8,
+      "neutral": 7
+    }
+  },
+  "test": {
+    "rows": 123,
+    "unique_ids": 115,
+    "sentiments": {
+      "positive": 108,
+      "negative": 10,
+      "neutral": 5
+    }
+  },
+  "iaa": {
+    "n_samples": 180,
+    "agreement_rate": 0.7778,
+    "cohens_kappa": 0.6391,
+    "interpretation": "substantial"
+  }
+}
