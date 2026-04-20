@@ -12,19 +12,7 @@ Strategy:
 import spacy
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-# Aspect category → surface form keywords
-ASPECT_KEYWORDS: dict[str, list[str]] = {
-    "battery":      ["battery", "charge", "charging", "power"],
-    "screen":       ["screen", "display", "resolution", "brightness"],
-    "sound":        ["sound", "audio", "speaker", "volume", "bass"],
-    "performance":  ["performance", "speed", "fast", "slow", "lag", "processor"],
-    "price":        ["price", "cost", "value", "expensive", "cheap", "worth"],
-    "usability":    ["usability", "easy", "setup", "interface", "use", "intuitive"],
-    "design":       ["design", "build", "look", "size", "weight", "compact"],
-    "connectivity": ["wifi", "bluetooth", "connection", "connect", "network"],
-    "build_quality": ["quality", "durable", "sturdy", "flimsy", "material"],
-    "overall":      [],  # no specific keywords — use full sentence
-}
+from src.models.aspects import ASPECT_KEYWORDS, get_aspect_keywords
 
 _WINDOW = 5  # tokens before/after aspect mention
 
@@ -35,8 +23,7 @@ class RuleBasedABSA:
         self._vader = SentimentIntensityAnalyzer()
 
     def _get_keywords(self, aspect: str) -> list[str]:
-        aspect = aspect.lower()
-        return ASPECT_KEYWORDS.get(aspect, [aspect])
+        return get_aspect_keywords(aspect)
 
     def _extract_window(self, doc, aspect: str) -> str:
         """Return a windowed text around the aspect mention, or full text."""

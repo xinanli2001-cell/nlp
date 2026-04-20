@@ -10,6 +10,8 @@ Usage:
 import argparse
 import csv
 import sys
+from pathlib import Path
+
 import torch
 from torch.utils.data import DataLoader
 
@@ -35,14 +37,26 @@ def _get_bert(model_name: str):
         if model_name == "bert":
             from src.models.bert_absa import BertABSA
             from src.data.dataset import ABSADataset
+            checkpoint_path = Path("checkpoints/bert_absa_best.pt")
+            if not checkpoint_path.exists():
+                raise FileNotFoundError(
+                    "Missing checkpoint checkpoints/bert_absa_best.pt. "
+                    "Train the model first or place the checkpoint in the checkpoints/ directory."
+                )
             model = BertABSA().to(DEVICE)
-            model.load_state_dict(torch.load("checkpoints/bert_absa_best.pt", map_location=DEVICE))
+            model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE))
             _model_cache[model_name] = (model, ABSADataset)
         elif model_name == "extended":
             from src.models.extended_bert import ExtendedBertABSA
             from src.data.extended_dataset import ExtendedABSADataset
+            checkpoint_path = Path("checkpoints/extended_bert_best.pt")
+            if not checkpoint_path.exists():
+                raise FileNotFoundError(
+                    "Missing checkpoint checkpoints/extended_bert_best.pt. "
+                    "Train the model first or place the checkpoint in the checkpoints/ directory."
+                )
             model = ExtendedBertABSA().to(DEVICE)
-            model.load_state_dict(torch.load("checkpoints/extended_bert_best.pt", map_location=DEVICE))
+            model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE))
             _model_cache[model_name] = (model, ExtendedABSADataset)
         else:
             raise ValueError(f"Unknown model: {model_name}. Choose: baseline, bert, extended")

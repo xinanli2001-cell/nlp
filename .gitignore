@@ -12,3 +12,8 @@ data/final/*
 archive/
 .claude/
 .pytest_cache/
+.venv/
+venv/
+__pycache__/
+*.pyc
+outputs/

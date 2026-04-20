@@ -10,7 +10,7 @@ from torch.utils.data import Dataset
 from transformers import BertTokenizer
 
 from src.data.dataset import LABEL2ID
-from src.models.baseline import ASPECT_KEYWORDS
+from src.models.aspects import ASPECT_KEYWORDS, get_aspect_keywords
 
 _TOKENIZER = None
 
@@ -28,7 +28,7 @@ def mark_aspect_in_text(review: str, aspect: str) -> str:
     Find the first occurrence of an aspect keyword in the review and wrap it
     with [ASPECT] ... [/ASPECT]. Returns original text if not found.
     """
-    keywords = ASPECT_KEYWORDS.get(aspect.lower(), [aspect.lower()])
+    keywords = get_aspect_keywords(aspect)
     for kw in keywords:
         pattern = re.compile(r"\b" + re.escape(kw) + r"\b", re.IGNORECASE)
         match = pattern.search(review)

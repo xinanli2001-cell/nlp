@@ -1,18 +1,34 @@
-from sklearn.metrics import (
-    precision_recall_fscore_support,
-    accuracy_score,
-)
+"""Evaluation metrics for three-way ABSA sentiment classification."""
+
+from __future__ import annotations
+
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
 LABELS = ["positive", "negative", "neutral"]
 
 
 def compute_metrics(golds: list[str], preds: list[str]) -> dict:
-    """Return accuracy, macro P/R/F1, and per-class breakdown."""
+    """Return accuracy, macro precision/recall/F1, and per-class F1 scores.
+
+    Parameters
+    ----------
+    golds:
+        Gold sentiment labels in string form.
+    preds:
+        Predicted sentiment labels in string form.
+    """
     precision, recall, f1, _ = precision_recall_fscore_support(
-        golds, preds, average="macro", zero_division=0
+        golds,
+        preds,
+        average="macro",
+        zero_division=0,
     )
     _, _, per_class_f1, _ = precision_recall_fscore_support(
-        golds, preds, labels=LABELS, average=None, zero_division=0
+        golds,
+        preds,
+        labels=LABELS,
+        average=None,
+        zero_division=0,
     )
     return {
         "accuracy": accuracy_score(golds, preds),
@@ -20,13 +36,14 @@ def compute_metrics(golds: list[str], preds: list[str]) -> dict:
         "recall": round(float(recall), 4),
         "macro_f1": round(float(f1), 4),
         "per_class": {
-            label: round(float(f), 4)
-            for label, f in zip(LABELS, per_class_f1)
+            label: round(float(score), 4)
+            for label, score in zip(LABELS, per_class_f1)
         },
     }
 
 
 def print_report(golds: list[str], preds: list[str], model_name: str = "") -> None:
+    """Pretty-print the metrics returned by :func:`compute_metrics`."""
     result = compute_metrics(golds, preds)
     print(f"\n=== {model_name} ===")
     print(f"Accuracy:  {result['accuracy']:.4f}")
