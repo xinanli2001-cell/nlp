@@ -6,21 +6,21 @@ Complete evaluation of Rule-Based Baseline, Standard BERT, Extended BERT (aspect
 
 ---
 
-## 1. Figures
+## 1. Dataset Composition
 
-All figures are in `outputs/figures/` as both PDF (vector) and PNG (raster, 300 dpi).
+![Sentiment class distribution by dataset](outputs/figures/fig5_data_distribution.png)
 
-| # | File | What it shows |
-|---|---|---|
-| 1 | `fig1_macro_f1_distribution` | Violin + strip plot of Macro F1 across the 20 seeds per (model, domain) with baseline reference |
-| 2 | `fig2_cross_domain_scatter` | Per-seed scatter of in-domain vs cross-domain Macro F1 — points below y=x indicate lost transferability |
-| 3 | `fig3_per_class_f1` | Per-class F1 (positive / negative / neutral) mean ± 1σ, faceted by domain |
-| 4 | `fig4_variance` | Standard deviation of Macro F1 and Neutral F1 per (model, domain) — training stability |
-| 5 | `fig5_data_distribution` | Sentiment-class distribution of the project dataset vs SemEval laptop and restaurant |
+*Figure 5. Project data is heavily imbalanced (87.7% positive vs ~6% each for negative and neutral), whereas SemEval 2014 laptop and restaurant splits are far more balanced. This asymmetry drives many of the downstream findings — notably the near-zero neutral F1 achieved by BERT variants when the training-domain bias is carried over to the SemEval domains.*
+
+All figures below are also saved as vector PDFs under `outputs/figures/`.
 
 ---
 
 ## 2. In-Domain Benchmark (project test, 123 examples)
+
+![Macro F1 distribution across 20 seeds](outputs/figures/fig1_macro_f1_distribution.png)
+
+*Figure 1. Violin + strip plot of Macro F1 per (model, domain) across 20 seeds. Dashed line is the Rule-Based baseline. In-domain the three BERT variants overlap heavily — seed noise swamps any architectural difference. Cross-domain (middle, right), RoBERTa's violin sits visibly higher than either BERT variant.*
 
 | Model | Accuracy | **Macro F1** | Positive F1 | Negative F1 | Neutral F1 |
 |---|---|---|---|---|---|
@@ -36,6 +36,14 @@ Best single-seed Macro F1 observed: **Extended BERT seed 99 → 0.7319**, Standa
 ## 3. Cross-Domain Benchmark (SemEval 2014 Task 4)
 
 No retraining. Models trained on 569 Amazon electronics reviews are evaluated directly on SemEval laptop / restaurant data.
+
+![In-domain vs cross-domain Macro F1 per seed](outputs/figures/fig2_cross_domain_scatter.png)
+
+*Figure 2. Each point is one seed. Below the y=x diagonal means the model lost transferability. BERT variants (blue, green) cluster clearly below the line on both SemEval laptop and restaurant; RoBERTa (red) straddles the diagonal on laptop and stays closer to it on restaurant — i.e. RoBERTa transfers without catastrophic loss while the BERT variants do not.*
+
+![Per-class F1 across three domains](outputs/figures/fig3_per_class_f1.png)
+
+*Figure 3. Per-class F1 (positive / negative / neutral, shown as three alpha-shaded bars per model) with 1-σ error bars from the 20-seed pool. In-domain all models reach ~0.94 positive F1. Cross-domain (middle, right panels) BERT variants' lightest bar — neutral F1 — collapses to near-zero. Only RoBERTa retains meaningful neutral prediction across domains. The rule-based baseline, having nothing to overfit to, holds the most consistent neutral F1 across domains.*
 
 ### 3.1 Laptop (2313 examples)
 
@@ -73,6 +81,10 @@ Ranking flips between in-domain and cross-domain. RoBERTa wins the roll-up by ~0
 ---
 
 ## 5. Multi-Seed Variance Table
+
+![Standard deviation of Macro F1 and Neutral F1 per (model, domain)](outputs/figures/fig4_variance.png)
+
+*Figure 4. Per-(model, domain) standard deviation across 20 seeds. Lower σ means more reproducible training. Caveat for the right panel: Standard BERT's low Neutral F1 σ cross-domain is **not** a sign of stability — it is low because the model predicts ~0 neutral on almost every seed, so there is nothing to vary. RoBERTa's larger Neutral F1 σ reflects its willingness to predict neutral at all; its worst seeds still beat BERT variants' best seeds on the neutral axis.*
 
 Per-seed numbers are in `outputs/evaluation/multi_seed_full_cuda/full_benchmark.csv`; per-(model, domain) mean / stdev / min / max in `outputs/evaluation/multi_seed_full_cuda/full_benchmark_summary.json`.
 
