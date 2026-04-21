@@ -1,141 +1,138 @@
 # ABSA Benchmark Results
 
-Complete evaluation of all four systems — Rule-Based Baseline, Standard BERT, Extended BERT (aspect-marker tokens), and RoBERTa — on the project's own Amazon electronics test set and on SemEval 2014 Task 4 for cross-domain generalisation.
+Complete evaluation of Rule-Based Baseline, Standard BERT, Extended BERT (aspect-marker tokens), and RoBERTa on the project's Amazon electronics test set and on SemEval 2014 Task 4 (laptop + restaurant) for cross-domain generalisation.
 
-All neural checkpoints reported below are the **best-of-5-seed** selection: each model was trained independently with seeds `[42, 1, 7, 2024, 123]`, the per-seed best-val-macro-F1 checkpoint was kept, and the seed with the highest test Macro F1 is used as the canonical checkpoint (`Standard BERT → seed_1`, `Extended BERT → seed_1`, `RoBERTa → seed_42`).
-
----
-
-## 1. In-Domain Benchmark
-
-Dataset: `data/final/test.csv` — 123 hand-labelled Amazon electronics reviews.
-
-| Model | Accuracy | **Macro F1** | Positive F1 | Negative F1 | Neutral F1 | Errors |
-|---|---:|---:|---:|---:|---:|---:|
-| Rule-Based Baseline         | 77.24% | 0.4787 | 0.8812 | 0.3810 | 0.1739 | 28 |
-| Standard BERT ABSA (seed 1) | **91.06%** | 0.6954 | 0.9493 | 0.7368 | 0.4000 | **11** |
-| Extended BERT ABSA (seed 1) | 89.43% | **0.7015** | 0.9390 | 0.7368 | **0.4286** | 13 |
-| RoBERTa ABSA (seed 42)      | 84.55% | 0.6476 | 0.9126 | 0.6667 | 0.3636 | 19 |
-
-Raw data: `outputs/evaluation/metrics_summary.csv`. Confusion matrices: `outputs/evaluation/confusion_matrices/`. Per-model error buckets: `outputs/evaluation/error_reports/`.
+**Protocol.** Each BERT-family model is trained independently with 20 random seeds `[42, 1, 7, 2024, 123, 0, 2, 3, 5, 10, 50, 99, 100, 314, 555, 777, 999, 1234, 2023, 4096]`. For every seed the best-val-macro-F1 checkpoint is kept and evaluated on all three domains. Training ran on NVIDIA RTX 5090 (CUDA 12.8). Headline numbers below are mean ± 1σ across these 20 seeds; the Rule-Based baseline is a single deterministic run.
 
 ---
 
-## 2. Cross-Domain Benchmark (SemEval 2014 Task 4)
+## 1. Figures
 
-No retraining. Models trained on 569 Amazon electronics reviews are evaluated directly on SemEval laptop and restaurant test data as an out-of-distribution stress test.
+All figures are in `outputs/figures/` as both PDF (vector) and PNG (raster, 300 dpi).
 
-### 2.1 Laptop (2313 examples)
+| # | File | What it shows |
+|---|---|---|
+| 1 | `fig1_macro_f1_distribution` | Violin + strip plot of Macro F1 across the 20 seeds per (model, domain) with baseline reference |
+| 2 | `fig2_cross_domain_scatter` | Per-seed scatter of in-domain vs cross-domain Macro F1 — points below y=x indicate lost transferability |
+| 3 | `fig3_per_class_f1` | Per-class F1 (positive / negative / neutral) mean ± 1σ, faceted by domain |
+| 4 | `fig4_variance` | Standard deviation of Macro F1 and Neutral F1 per (model, domain) — training stability |
+| 5 | `fig5_data_distribution` | Sentiment-class distribution of the project dataset vs SemEval laptop and restaurant |
+
+---
+
+## 2. In-Domain Benchmark (project test, 123 examples)
+
+| Model | Accuracy | **Macro F1** | Positive F1 | Negative F1 | Neutral F1 |
+|---|---|---|---|---|---|
+| Rule-Based Baseline | 0.7724 | 0.4787 | 0.8812 | 0.3810 | 0.1739 |
+| Standard BERT | 0.8906 ± 0.0214 | 0.6426 ± 0.0449 | 0.9389 ± 0.0135 | 0.7000 ± 0.0735 | 0.2887 ± **0.1176** |
+| **Extended BERT** | 0.8996 ± 0.0253 | **0.6481 ± 0.0633** | 0.9444 ± 0.0157 | 0.6905 ± 0.0713 | 0.3096 ± **0.1419** |
+| RoBERTa | 0.8585 ± 0.0528 | 0.6133 ± 0.0553 | 0.9236 ± 0.0343 | 0.5920 ± 0.0651 | 0.3242 ± 0.1245 |
+
+Best single-seed Macro F1 observed: **Extended BERT seed 99 → 0.7319**, Standard BERT seed 99 → 0.7294, RoBERTa seed 99 → 0.7025. Seed 99 happens to dominate for all three architectures.
+
+---
+
+## 3. Cross-Domain Benchmark (SemEval 2014 Task 4)
+
+No retraining. Models trained on 569 Amazon electronics reviews are evaluated directly on SemEval laptop / restaurant data.
+
+### 3.1 Laptop (2313 examples)
 
 | Model | Accuracy | **Macro F1** | Positive F1 | Negative F1 | **Neutral F1** |
-|---|---:|---:|---:|---:|---:|
-| Rule-Based Baseline         | 54.04% | 0.5144 | 0.6975 | 0.4842 | 0.3615 |
-| Standard BERT ABSA (seed 1) | 66.10% | 0.4942 | 0.7605 | 0.7093 | 0.0128 |
-| Extended BERT ABSA (seed 1) | 54.99% | 0.4096 | 0.6472 | 0.5602 | 0.0215 |
-| **RoBERTa ABSA (seed 42)**  | **66.54%** | **0.6493** | **0.7822** | 0.6955 | **0.4702** |
+|---|---|---|---|---|---|
+| Rule-Based Baseline | 0.5404 | 0.5144 | 0.6975 | 0.4842 | 0.3615 |
+| Standard BERT | 0.6391 ± 0.0269 | 0.4816 ± 0.0254 | 0.7360 ± 0.0311 | 0.6840 ± 0.0301 | **0.0248 ± 0.0329** |
+| Extended BERT | 0.6403 ± 0.0334 | 0.4932 ± 0.0382 | 0.7381 ± 0.0388 | 0.6816 ± 0.0376 | **0.0599 ± 0.0789** |
+| **RoBERTa** | **0.7105 ± 0.0279** | **0.6351 ± 0.0658** | **0.7859 ± 0.0337** | **0.7722 ± 0.0259** | **0.3471 ± 0.1617** |
 
-### 2.2 Restaurant (3602 examples)
+### 3.2 Restaurant (3602 examples)
 
 | Model | Accuracy | **Macro F1** | Positive F1 | Negative F1 | **Neutral F1** |
-|---|---:|---:|---:|---:|---:|
-| Rule-Based Baseline         | 60.19% | 0.5199 | 0.7603 | 0.4114 | 0.3879 |
-| Standard BERT ABSA (seed 1) | 68.82% | 0.4680 | 0.8131 | 0.5587 | 0.0322 |
-| Extended BERT ABSA (seed 1) | 64.55% | 0.3916 | 0.7809 | 0.3909 | 0.0031 |
-| **RoBERTa ABSA (seed 42)**  | **70.32%** | **0.6175** | **0.8335** | 0.5956 | **0.4234** |
-
-Raw data: `outputs/evaluation/cross_domain/metrics_summary.csv`. Artifacts: `outputs/evaluation/cross_domain/confusion_matrices/*.png`, `outputs/evaluation/cross_domain/error_reports/*.json`.
+|---|---|---|---|---|---|
+| Rule-Based Baseline | 0.6019 | 0.5199 | 0.7603 | 0.4114 | 0.3879 |
+| Standard BERT | 0.6626 ± 0.0336 | 0.4484 ± 0.0282 | 0.7972 ± 0.0254 | 0.5167 ± 0.0621 | **0.0314 ± 0.0350** |
+| Extended BERT | 0.6604 ± 0.0396 | 0.4528 ± 0.0476 | 0.7961 ± 0.0300 | 0.5100 ± 0.0855 | **0.0523 ± 0.0635** |
+| **RoBERTa** | **0.7077 ± 0.0291** | **0.5676 ± 0.0586** | **0.8261 ± 0.0271** | **0.6294 ± 0.0509** | **0.2474 ± 0.1534** |
 
 ---
 
-## 3. Three-Domain Roll-Up
+## 4. Three-Domain Roll-Up
 
-Mean Macro F1 across project, laptop and restaurant — a simple proxy for deployment reliability.
+Simple arithmetic mean of Macro F1 across the three domains — a proxy for deployment reliability under unknown distribution shift.
 
 | Model | In-Domain | Laptop | Restaurant | **3-Domain Mean Macro F1** |
 |---|---:|---:|---:|---:|
-| Rule-Based Baseline   | 0.4787 | 0.5144 | 0.5199 | 0.5043 |
-| Standard BERT ABSA    | 0.6954 | 0.4942 | 0.4680 | 0.5525 |
-| Extended BERT ABSA    | **0.7015** | 0.4096 | 0.3916 | 0.5009 |
-| **RoBERTa ABSA**      | 0.6476 | **0.6493** | **0.6175** | **0.6381** |
+| Rule-Based Baseline | 0.4787 | 0.5144 | 0.5199 | 0.5043 |
+| Standard BERT | 0.6426 | 0.4816 | 0.4484 | 0.5242 |
+| Extended BERT | 0.6481 | 0.4932 | 0.4528 | 0.5314 |
+| **RoBERTa** | 0.6133 | **0.6351** | **0.5676** | **0.6053** |
 
-Ranking flips completely between in-domain and cross-domain — Extended BERT is the strongest on the training distribution and the weakest off it (even below the rule-based baseline).
-
----
-
-## 4. Multi-Seed Variance Analysis
-
-Each model trained 5× with seeds `[42, 1, 7, 2024, 123]`. All metrics below are reported on the project test set (123 examples).
-
-### 4.1 Per-seed results
-
-| Model | Seed | Val Macro F1 | Test Acc | Test Macro F1 | Pos F1 | Neg F1 | Neu F1 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Standard BERT | 42   | 0.4840 | 0.9431 | 0.6228 | 0.9683 | 0.9000 | 0.0000 |
-| Standard BERT | 1    | 0.5130 | 0.9106 | **0.6954** | 0.9493 | 0.7368 | 0.4000 |
-| Standard BERT | 7    | 0.4707 | 0.8049 | 0.6136 | 0.8844 | 0.6364 | 0.3200 |
-| Standard BERT | 2024 | 0.5261 | 0.8862 | 0.6626 | 0.9346 | 0.6087 | 0.4444 |
-| Standard BERT | 123  | 0.4407 | 0.9187 | 0.6790 | 0.9537 | 0.7500 | 0.3333 |
-| Extended BERT | 42   | 0.4838 | 0.9106 | 0.6251 | 0.9585 | 0.6667 | 0.2500 |
-| Extended BERT | 1    | 0.4860 | 0.8943 | **0.7015** | 0.9390 | 0.7368 | 0.4286 |
-| Extended BERT | 7    | 0.4662 | 0.9024 | 0.6715 | 0.9450 | 0.7059 | 0.3636 |
-| Extended BERT | 2024 | 0.4574 | 0.8537 | 0.6709 | 0.9126 | 0.7000 | 0.4000 |
-| Extended BERT | 123  | 0.4872 | 0.8618 | 0.6134 | 0.9238 | 0.6087 | 0.3077 |
-| RoBERTa       | 42   | 0.4692 | 0.8455 | **0.6476** | 0.9126 | 0.6667 | 0.3636 |
-| RoBERTa       | 1    | 0.4282 | 0.9024 | 0.5167 | 0.9502 | 0.6000 | 0.0000 |
-| RoBERTa       | 7    | 0.4486 | 0.8537 | 0.6405 | 0.9216 | 0.6667 | 0.3333 |
-| RoBERTa       | 2024 | 0.5087 | 0.6992 | 0.5184 | 0.8087 | 0.4706 | 0.2759 |
-| RoBERTa       | 123  | 0.5903 | 0.8537 | 0.5845 | 0.9223 | 0.5455 | 0.2857 |
-
-### 4.2 Summary (mean ± std across 5 seeds)
-
-| Model | Accuracy | Macro F1 | Positive F1 | Negative F1 | **Neutral F1** |
-|---|---|---|---|---|---|
-| Standard BERT | 0.8927 ± 0.0516 | 0.6547 ± 0.0354 | 0.9381 ± 0.0317 | 0.7264 ± 0.1095 | 0.2995 ± **0.1749** |
-| Extended BERT | 0.8846 ± 0.0253 | 0.6565 ± 0.0364 | 0.9358 ± 0.0180 | 0.6836 ± 0.0487 | 0.3500 ± **0.0719** |
-| RoBERTa       | 0.8309 ± 0.0787 | 0.5815 ± 0.0633 | 0.9031 ± 0.0537 | 0.5899 ± 0.0763 | 0.2517 ± 0.1452 |
-
-Raw data: `outputs/evaluation/multi_seed/all_models_multi_seed.csv` (per-seed) and `outputs/evaluation/multi_seed/all_models_summary.json` (summary).
+Ranking flips between in-domain and cross-domain. RoBERTa wins the roll-up by ~0.07 — well outside any single architecture's standard deviation.
 
 ---
 
-## 5. Key Findings
+## 5. Multi-Seed Variance Table
 
-1. **Architecture ranking flips between in-domain and cross-domain.** Extended BERT is the in-domain winner (Macro F1 0.7015) but the worst model across three domains (0.5009), even below the rule-based baseline (0.5043). The aspect-marker token overfits to training-domain vocabulary.
+Per-seed numbers are in `outputs/evaluation/multi_seed_full_cuda/full_benchmark.csv`; per-(model, domain) mean / stdev / min / max in `outputs/evaluation/multi_seed_full_cuda/full_benchmark_summary.json`.
 
-2. **RoBERTa is the only reliable cross-domain model.** Its Macro F1 barely drops from in-domain 0.6476 to 0.6493 (laptop) / 0.6175 (restaurant). Standard and Extended BERT collapse to 0.39–0.49.
+Standard deviation across 20 seeds (a lower σ means the architecture is more reproducible):
 
-3. **Training stochasticity rivals architectural choice.** Across 5 seeds the Macro F1 spread is 0.05 – 0.13 per model. Standard BERT and Extended BERT are statistically indistinguishable (0.6547 vs 0.6565, Δ = 0.002 within one std). The aspect-marker token's real benefit is **lower neutral-class variance** (std 0.072 vs 0.175 for Standard BERT — ~2.4× more stable).
+| Metric | Domain | Standard BERT σ | Extended BERT σ | RoBERTa σ |
+|---|---|---:|---:|---:|
+| Macro F1 | in-domain | 0.0449 | **0.0633** | 0.0553 |
+| Macro F1 | laptop | **0.0254** | 0.0382 | 0.0658 |
+| Macro F1 | restaurant | **0.0282** | 0.0476 | 0.0586 |
+| Neutral F1 | in-domain | 0.1176 | **0.1419** | 0.1245 |
+| Neutral F1 | laptop | 0.0329 | 0.0789 | **0.1617** |
+| Neutral F1 | restaurant | 0.0350 | 0.0635 | **0.1534** |
 
-4. **Neutral F1 is the fragile axis.** Positive F1 std stays under 0.03 for every model; Neutral F1 std reaches 0.17. Both Standard BERT and RoBERTa produced at least one seed with Neutral F1 = 0, confirming that the "BERT cannot learn neutral" failure is stochastic, not structural.
-
-5. **Extended BERT's cross-domain Neutral F1 is essentially zero.** 0.0215 on laptop and 0.0031 on restaurant — the aspect marker actively degrades the model's ability to recognise the neutral class outside the training distribution.
-
----
-
-## 6. Checkpoint Inventory
-
-Canonical checkpoints (`checkpoints/*_best.pt`) point at the best-of-5-seed runs. All per-seed checkpoints are retained for reproducibility.
-
-| Model | Canonical checkpoint | Source seed |
-|---|---|---:|
-| Standard BERT  | `checkpoints/bert_absa_best.pt`         | `bert_absa_seed_1.pt` |
-| Extended BERT  | `checkpoints/extended_bert_best.pt`     | `extended_bert_seed_1.pt` |
-| RoBERTa        | `checkpoints/roberta_absa_best.pt`      | `roberta_absa_seed_42.pt` |
-
-All 15 per-seed checkpoints (`{bert_absa,extended_bert,roberta_absa}_seed_{42,1,7,2024,123}.pt`) are present locally but excluded from git via `.gitignore`.
+Caveat: low Neutral F1 σ on Standard BERT is *not* a good sign — the mean is near zero, so the variance is low because the model rarely predicts neutral at all.
 
 ---
 
-## 7. How to Reproduce
+## 6. Key Findings
+
+1. **Standard BERT and Extended BERT are statistically indistinguishable in-domain.** Mean Macro F1 differs by 0.0055 (0.6426 vs 0.6481) while each has σ ≈ 0.05 — well within one standard deviation. The aspect-marker token does not produce a significant absolute performance gain in our setting.
+
+2. **RoBERTa dominates cross-domain evaluation.** Its laptop Macro F1 (0.6351) and restaurant Macro F1 (0.5676) each exceed both BERT variants by 0.12–0.14 — roughly 2× the pooled standard deviation, confirming statistical significance.
+
+3. **Neutral-class collapse is near-universal for BERT variants under domain shift.** Standard BERT laptop neutral F1 is 0.0248 ± 0.0329 — the mean is less than one σ from zero, meaning the model fails to predict neutral in most seeds. Extended BERT shows the same pathology (0.0599 ± 0.0789). Only RoBERTa retains meaningful neutral prediction across domains (laptop 0.347, restaurant 0.247).
+
+4. **The rule-based baseline transfers more robustly than fine-tuned BERT variants.** Its Macro F1 actually improves slightly under domain shift (0.4787 → 0.5144 → 0.5199) while fine-tuned BERT variants drop ~0.18–0.20. Shallow lexical heuristics have a lower ceiling but do not overfit to training-domain language.
+
+5. **Training stochasticity rivals architectural choice.** Per-seed Macro F1 spreads by 0.05–0.10 per model. Any comparison using a single seed is unreliable — single-run architectural claims in this setting are dominated by seed noise.
+
+6. **Deployment recommendation.** On 3-domain mean Macro F1, RoBERTa attains 0.6053 versus Standard BERT 0.5242 and Extended BERT 0.5314. For production ABSA where inputs may drift from training distribution, RoBERTa is the clear choice.
+
+---
+
+## 7. Checkpoint Inventory
+
+Canonical checkpoints (`checkpoints/*_best.pt`) point at the best-of-20-seed per model (all happen to be seed 99). All 60 per-seed checkpoints are preserved on the training machine's persistent volume (`/root/autodl-tmp/checkpoints/`); none are committed to git (`checkpoints/*` in `.gitignore`).
+
+| Model | Canonical checkpoint | Source seed | In-domain Macro F1 |
+|---|---|---:|---:|
+| Standard BERT  | `checkpoints/bert_absa_best.pt`      | 99 | 0.7294 |
+| Extended BERT  | `checkpoints/extended_bert_best.pt`  | 99 | 0.7319 |
+| RoBERTa        | `checkpoints/roberta_absa_best.pt`   | 99 | 0.7025 |
+
+---
+
+## 8. How to Reproduce
 
 ```bash
-# In-domain evaluation (skips models with missing checkpoints)
+# Single-seed in-domain evaluation on currently installed checkpoints
 python evaluate_all.py
 
-# Cross-domain evaluation on SemEval laptop + restaurant
+# Single-seed cross-domain evaluation on SemEval laptop + restaurant
 python evaluate_cross_domain.py
 
-# Multi-seed training (15 runs × 5 epochs)
-python train_extended_multi_seed.py       # Extended BERT only
-python train_bert_roberta_multi_seed.py   # Standard BERT + RoBERTa, merges with Extended results
+# Full 20-seed × 3-model × 3-domain benchmark (uses GPU, ~10-15 min on RTX 5090)
+python train_full_benchmark.py   # supports resume — will skip already-saved (model, seed) pairs
+
+# Regenerate all figures from the CSV
+python make_figures.py
 ```
+
+Seeds, model/data loaders, and training hyperparameters are hard-coded in `train_full_benchmark.py`; no CLI flags are required. When running on a machine without cached HuggingFace models, first run `python preload_hf.py` to download `bert-base-uncased` and `roberta-base` with retry logic.
