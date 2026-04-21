@@ -16,4 +16,10 @@ archive/
 venv/
 __pycache__/
 *.pyc
-outputs/
+# Ignore everything generated under outputs/ by default,
+# but whitelist the publication-ready artifacts that RESULTS.md references.
+outputs/*
+!outputs/figures/
+!outputs/evaluation/
+outputs/evaluation/*
+!outputs/evaluation/multi_seed_full_cuda/
