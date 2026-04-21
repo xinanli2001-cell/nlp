@@ -1,11 +1,19 @@
-# src/data/iaa.py
+"""Inter-annotator agreement helpers for the manually labelled ABSA dataset."""
+
+from __future__ import annotations
+
 import csv
 from sklearn.metrics import cohen_kappa_score
 
 
 def load_annotations(path_a: str, path_b: str) -> tuple[list[str], list[str]]:
-    """Load two annotation CSV files and return aligned sentiment lists."""
-    def read_csv(path):
+    """Load two annotator CSVs and align them on shared row IDs.
+
+    The expected format is a header row containing at least ``id`` and
+    ``sentiment`` columns.
+    """
+
+    def read_csv(path: str) -> dict[str, str]:
         with open(path, encoding="utf-8") as f:
             reader = csv.DictReader(f)
             return {row["id"]: row["sentiment"] for row in reader}
@@ -19,17 +27,18 @@ def load_annotations(path_a: str, path_b: str) -> tuple[list[str], list[str]]:
 
 
 def compute_cohens_kappa(labels_a: list[str], labels_b: list[str]) -> float:
-    """Compute Cohen's kappa between two annotators."""
+    """Compute Cohen's kappa between two aligned label sequences."""
     return cohen_kappa_score(labels_a, labels_b)
 
 
 def iaa_report(path_a: str, path_b: str) -> dict:
-    """Return a full IAA report dict."""
+    """Return a concise IAA report with rate, kappa, and interpretation."""
     labels_a, labels_b = load_annotations(path_a, path_b)
-    kappa = compute_cohens_kappa(labels_a, labels_b)
-    agreed = sum(a == b for a, b in zip(labels_a, labels_b))
     if len(labels_a) == 0:
         raise ValueError("No common IDs found between the two annotation files.")
+
+    kappa = compute_cohens_kappa(labels_a, labels_b)
+    agreed = sum(a == b for a, b in zip(labels_a, labels_b))
     return {
         "n_samples": len(labels_a),
         "agreement_rate": agreed / len(labels_a),
@@ -46,6 +55,7 @@ def iaa_report(path_a: str, path_b: str) -> dict:
 
 if __name__ == "__main__":
     import sys
+
     report = iaa_report(sys.argv[1], sys.argv[2])
-    for k, v in report.items():
-        print(f"{k}: {v}")
+    for key, value in report.items():
+        print(f"{key}: {value}")
