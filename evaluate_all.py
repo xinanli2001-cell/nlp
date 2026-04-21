@@ -24,11 +24,13 @@ from torch.utils.data import DataLoader
 
 from src.data.dataset import ABSADataset, ID2LABEL, LABEL2ID, load_csv
 from src.data.extended_dataset import ExtendedABSADataset
+from src.data.roberta_dataset import RobertaABSADataset
 from src.evaluation.error_analysis import analyse_errors
 from src.evaluation.metrics import compute_metrics, print_report
 from src.models.baseline import RuleBasedABSA
 from src.models.bert_absa import BertABSA
 from src.models.extended_bert import ExtendedBertABSA
+from src.models.robertaabsa import RobertaABSA
 
 DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
 TEST_PATH = Path("data/final/test.csv")
@@ -199,6 +201,41 @@ def _evaluate_extended_bert(test_rows: list[dict]) -> dict | None:
     return _build_summary_row(model_name, metrics, n_examples=len(golds))
 
 
+def _evaluate_roberta(test_rows: list[dict]) -> dict | None:
+    """Evaluate the RoBERTa classifier when its checkpoint exists."""
+    model_name = "RoBERTa ABSA"
+    checkpoint_path = CHECKPOINT_DIR / "roberta_absa_best.pt"
+    model = RobertaABSA().to(DEVICE)
+    if not _load_checkpoint(model, checkpoint_path):
+        return None
+
+    model.eval()
+    data_loader = DataLoader(RobertaABSADataset(test_rows), batch_size=32)
+    golds, preds = [], []
+    with torch.no_grad():
+        for batch in data_loader:
+            logits = model(
+                batch["input_ids"].to(DEVICE),
+                batch["attention_mask"].to(DEVICE),
+            )
+            preds.extend(ID2LABEL[i] for i in logits.argmax(-1).cpu().tolist())
+            golds.extend(ID2LABEL[i] for i in batch["label"].cpu().tolist())
+
+    print_report(golds, preds, model_name)
+    metrics = compute_metrics(golds, preds)
+    analyse_errors(
+        [row["review"] for row in test_rows],
+        [row["aspect"] for row in test_rows],
+        golds,
+        preds,
+        model_name=model_name,
+        output_path=ERROR_DIR / f"{_slugify(model_name)}.json",
+    )
+    matrix_path = _save_confusion_matrix(golds, preds, model_name)
+    print(f"Saved confusion matrix to {matrix_path}")
+    return _build_summary_row(model_name, metrics, n_examples=len(golds))
+
+
 def main() -> None:
     """Run the full evaluation pipeline and save all derived artifacts."""
     if not TEST_PATH.exists():
@@ -219,6 +256,10 @@ def main() -> None:
     extended_row = _evaluate_extended_bert(test_rows)
     if extended_row is not None:
         summary_rows.append(extended_row)
+
+    roberta_row = _evaluate_roberta(test_rows)
+    if roberta_row is not None:
+        summary_rows.append(roberta_row)
 
     _save_summary(summary_rows)
     print(f"\nSaved metrics summary to {SUMMARY_CSV}")
