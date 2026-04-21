@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+<rect width="100%" height="100%" fill="white"/>
+<text x="480.0" y="36" text-anchor="middle" font-size="26" font-family="Arial">Sentiment Distribution</text>
+<line x1="120" y1="450" x2="920" y2="450" stroke="black" stroke-width="2"/>
+<line x1="120" y1="70" x2="120" y2="450" stroke="black" stroke-width="2"/>
+<line x1="114" y1="450.0" x2="120" y2="450.0" stroke="black" stroke-width="1"/>
+<text x="108" y="455.0" text-anchor="end" font-size="14" font-family="Arial">0</text>
+<line x1="120" y1="450.0" x2="920" y2="450.0" stroke="#dddddd" stroke-width="1"/>
+<line x1="114" y1="374.0" x2="120" y2="374.0" stroke="black" stroke-width="1"/>
+<text x="108" y="379.0" text-anchor="end" font-size="14" font-family="Arial">143</text>
+<line x1="120" y1="374.0" x2="920" y2="374.0" stroke="#dddddd" stroke-width="1"/>
+<line x1="114" y1="298.0" x2="120" y2="298.0" stroke="black" stroke-width="1"/>
+<text x="108" y="303.0" text-anchor="end" font-size="14" font-family="Arial">286</text>
+<line x1="120" y1="298.0" x2="920" y2="298.0" stroke="#dddddd" stroke-width="1"/>
+<line x1="114" y1="222.0" x2="120" y2="222.0" stroke="black" stroke-width="1"/>
+<text x="108" y="227.0" text-anchor="end" font-size="14" font-family="Arial">428</text>
+<line x1="120" y1="222.0" x2="920" y2="222.0" stroke="#dddddd" stroke-width="1"/>
+<line x1="114" y1="146.0" x2="120" y2="146.0" stroke="black" stroke-width="1"/>
+<text x="108" y="151.0" text-anchor="end" font-size="14" font-family="Arial">571</text>
+<line x1="120" y1="146.0" x2="920" y2="146.0" stroke="#dddddd" stroke-width="1"/>
+<line x1="114" y1="70.0" x2="120" y2="70.0" stroke="black" stroke-width="1"/>
+<text x="108" y="75.0" text-anchor="end" font-size="14" font-family="Arial">714</text>
+<rect x="157.3" y="70.0" width="192.0" height="380.0" fill="#2f6f4f"/>
+<text x="253.3" y="62.0" text-anchor="middle" font-size="14" font-family="Arial">714</text>
+<text x="253.3" y="472" text-anchor="middle" font-size="14" font-family="Arial">positive</text>
+<rect x="424.0" y="419.1" width="192.0" height="30.9" fill="#2f6f4f"/>
+<text x="520.0" y="411.1" text-anchor="middle" font-size="14" font-family="Arial">58</text>
+<text x="520.0" y="472" text-anchor="middle" font-size="14" font-family="Arial">negative</text>
+<rect x="690.7" y="427.6" width="192.0" height="22.4" fill="#2f6f4f"/>
+<text x="786.7" y="419.6" text-anchor="middle" font-size="14" font-family="Arial">42</text>
+<text x="786.7" y="472" text-anchor="middle" font-size="14" font-family="Arial">neutral</text>
+</svg>
