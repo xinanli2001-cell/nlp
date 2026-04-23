@@ -35,7 +35,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-FULL_CSV = Path("outputs/evaluation/multi_seed_full_cuda/full_benchmark.csv")
+FULL_CSV = Path("outputs/evaluation/best_strategy/best_strategy.csv")
 BASELINE_IN_CSV = Path("outputs/evaluation/metrics_summary.csv")
 BASELINE_CROSS_CSV = Path("outputs/evaluation/cross_domain/metrics_summary.csv")
 SEMEVAL_STATS = Path("data/semeval_stats.json")
@@ -82,10 +82,12 @@ plt.rcParams.update({
 def _load_full() -> list[dict]:
     with FULL_CSV.open(encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
+    # Drop val rows so downstream filters by in_domain / laptop / restaurant only.
+    rows = [r for r in rows if r.get("domain") != "val"]
     for r in rows:
         r["seed"] = int(r["seed"])
         r["n_examples"] = int(r["n_examples"])
-        for k in ("val_macro_f1", "accuracy", "macro_f1",
+        for k in ("accuracy", "macro_f1",
                   "positive_f1", "negative_f1", "neutral_f1"):
             r[k] = float(r[k])
     return rows

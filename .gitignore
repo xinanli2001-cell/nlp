@@ -23,3 +23,6 @@ outputs/*
 !outputs/evaluation/
 outputs/evaluation/*
 !outputs/evaluation/multi_seed_full_cuda/
+!outputs/evaluation/all_models_curves/
+!outputs/evaluation/best_strategy/
+!outputs/evaluation/roberta_improved/
