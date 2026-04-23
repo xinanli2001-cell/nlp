@@ -32,11 +32,13 @@ FIELDS = [
 
 
 def _load(path: Path) -> list[dict]:
+    """Read a per-epoch curves CSV into a list of dict rows."""
     with path.open(encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
 
 def main() -> None:
+    """Merge the 5-epoch and 10-epoch curves into a single best-strategy CSV."""
     OUT.parent.mkdir(parents=True, exist_ok=True)
     curves5 = _load(CURVES_5)
     curves10 = _load(CURVES_10) if CURVES_10.exists() else []

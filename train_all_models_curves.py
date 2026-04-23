@@ -76,6 +76,7 @@ DOMAINS = {
 
 
 def set_seed(seed: int) -> None:
+    """Fix Python, NumPy and PyTorch RNGs so a given seed reproduces the same run."""
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -84,6 +85,7 @@ def set_seed(seed: int) -> None:
 
 
 def forward(model, batch, use_tti):
+    """Call ``model`` with BERT- or RoBERTa-style inputs depending on ``use_tti``."""
     if use_tti:
         return model(
             batch["input_ids"].to(DEVICE),
@@ -94,6 +96,7 @@ def forward(model, batch, use_tti):
 
 
 def evaluate(model, loader, use_tti):
+    """Run inference over ``loader`` and return gold / prediction label lists."""
     model.eval()
     golds, preds = [], []
     with torch.no_grad():
@@ -105,6 +108,7 @@ def evaluate(model, loader, use_tti):
 
 
 def _load_existing() -> tuple[list[dict], set[tuple[str, int]]]:
+    """Resume support: return existing rows plus the set of (model, seed) already complete."""
     if not CURVES_CSV.exists():
         return [], set()
     existing: list[dict] = []
@@ -126,6 +130,7 @@ def _load_existing() -> tuple[list[dict], set[tuple[str, int]]]:
 
 
 def _write(rows: list[dict]) -> None:
+    """Persist ``rows`` to the long-format per-epoch CSV."""
     if not rows:
         return
     with CURVES_CSV.open("w", newline="", encoding="utf-8") as f:
@@ -135,6 +140,11 @@ def _write(rows: list[dict]) -> None:
 
 
 def run_one(cfg: ModelConfig, seed: int, train_rows, eval_loaders) -> list[dict]:
+    """Train one (model, seed) for 5 epochs and return the per-epoch evaluation rows.
+
+    The model is retrained from scratch here; no checkpoint is saved because this
+    script's purpose is to log the learning curves rather than keep weights.
+    """
     set_seed(seed)
     train_dl = DataLoader(cfg.dataset_cls(train_rows), batch_size=BATCH_SIZE, shuffle=True)
     model = cfg.model_cls().to(DEVICE)
@@ -188,6 +198,7 @@ def run_one(cfg: ModelConfig, seed: int, train_rows, eval_loaders) -> list[dict]
 
 
 def main() -> None:
+    """Run the 20-seed x 3-model x 5-epoch curve collection end to end."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     print(f"Device: {DEVICE}")
     print(f"Seeds ({len(SEEDS)}): {SEEDS}")

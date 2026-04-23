@@ -7,6 +7,11 @@ DELAY = 10
 
 
 def try_download(fn, name: str):
+    """Call ``fn`` up to ``ATTEMPTS`` times with a short delay between retries.
+
+    Designed for HuggingFace downloads on networks where transient read
+    timeouts are common. Raises ``RuntimeError`` once every attempt has failed.
+    """
     for i in range(ATTEMPTS):
         try:
             print(f"[{i+1}/{ATTEMPTS}] downloading {name} ...", flush=True)
@@ -19,8 +24,14 @@ def try_download(fn, name: str):
     raise RuntimeError(f"exhausted retries for {name}")
 
 
-try_download(lambda: BertTokenizer.from_pretrained("bert-base-uncased"), "bert tokenizer")
-try_download(lambda: BertModel.from_pretrained("bert-base-uncased"), "bert-base-uncased model")
-try_download(lambda: RobertaTokenizer.from_pretrained("roberta-base"), "roberta tokenizer")
-try_download(lambda: RobertaModel.from_pretrained("roberta-base"), "roberta-base model")
-print("ALL MODELS CACHED", flush=True)
+def main() -> None:
+    """Download both tokenisers and both encoder weights into the local HF cache."""
+    try_download(lambda: BertTokenizer.from_pretrained("bert-base-uncased"), "bert tokenizer")
+    try_download(lambda: BertModel.from_pretrained("bert-base-uncased"), "bert-base-uncased model")
+    try_download(lambda: RobertaTokenizer.from_pretrained("roberta-base"), "roberta tokenizer")
+    try_download(lambda: RobertaModel.from_pretrained("roberta-base"), "roberta-base model")
+    print("ALL MODELS CACHED", flush=True)
+
+
+if __name__ == "__main__":
+    main()

@@ -66,6 +66,13 @@ plt.rcParams.update({
 
 
 def load_curves() -> dict[tuple[str, str, int], dict[int, float]]:
+    """Read per-epoch Macro F1 for each (model, domain, seed) across the two CSVs.
+
+    Standard BERT values come from the 5-epoch CSV; Extended BERT and RoBERTa
+    prefer the 10-epoch CSV when it is present and fall back to the 5-epoch CSV
+    otherwise. The returned mapping is keyed by (model_name, domain, seed) and
+    yields ``{epoch: macro_f1}`` dictionaries.
+    """
     curves: dict[tuple[str, str, int], dict[int, float]] = defaultdict(dict)
     # Standard BERT: 5-epoch data from the original CSV
     with CSV_PATH.open(encoding="utf-8") as f:
@@ -92,6 +99,7 @@ def load_curves() -> dict[tuple[str, str, int], dict[int, float]]:
 
 
 def main() -> None:
+    """Render fig6: per-epoch learning curves for all three models, saved as PDF + PNG."""
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     curves = load_curves()
     fig, axes = plt.subplots(len(MODEL_ORDER), len(DOMAIN_ORDER),
