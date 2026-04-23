@@ -20,7 +20,7 @@ main ────────── initial scaffold and baseline system
 
 ## Members
 
-### Xinan Li (Alex) — GitHub author: 李欣桉 `<lixinan@ALEX-MacBook.local>`
+### Xinan Li — GitHub author: 李欣桉 `<z5549727@ad.unsw.edu.au>`
 
 Branch: `main`. 15 commits, roughly +3,657 / −832 lines.
 
@@ -44,8 +44,9 @@ Built the initial four-file pipeline on the `main` branch:
 - Initial unit tests under `tests/` for baseline, dataset, IAA,
   metrics, and split logic.
 - First draft of `README.md`.
+- Initial draft of the project report
 
-### Jiehui Cheng (FayeJie) — GitHub author: Chhhjnb `<1031123267@qq.com>`
+### Huijie Cheng — GitHub author: Chhhjnb `<z5527580@ad.unsw.edu.au>`
 
 Branch: `partA`. 1 commit, +7,357 / −0 lines.
 
@@ -61,10 +62,10 @@ Data curation and second-annotator materials:
   four-field CSV schema.
 - `data/aspect_distribution.svg`, `data/sentiment_distribution.svg`,
   `data/semeval_stats.json` — dataset statistics.
-- `PARTA_REPORT.md` — the Part A write-up (later archived into
-  `experiments/` by Part D).
+- `PARTA_REPORT.md` — data-curation write-up (later archived into
+  `experiments/`).
 
-### Guanyu Chen — GitHub author: HarryLester (handle: HarryChan1923)
+### Guanyu Chen — GitHub author: HarryLester `<z5746041@ad.unsw.edu.au>`
 
 Branch: `roberta`. 1 commit, +175 / −0 lines.
 
@@ -77,7 +78,7 @@ RoBERTa model track:
 - Minor edits to `evaluate_all.py` to wire the RoBERTa checkpoint into
   the evaluation loop.
 
-### Yize Shen (Ezwinnnn) — GitHub author: Yize Shen `<z5459644@ad.unsw.edu.au>`
+### Yize Shen — GitHub author: Ezwinnnn `<z5459644@ad.unsw.edu.au>`
 
 Branch: `feature/c-part-evaluation`. 1 commit, +637 / −158 lines.
 
@@ -95,7 +96,7 @@ Evaluation pipeline hardening:
 - Added `tests/test_error_analysis.py`.
 - Miscellaneous README and `cli.py` cleanups.
 
-### Lunshuo Tian — GitHub author: Liiizhen `<dingzhen250@gmail.com>`
+### Lunshuo Tian — GitHub author: Liiizhen `<z5644811@ad.unsw.edu.au>`
 
 Branch: `partD-integration` (submission branch). 18 commits,
 roughly +9,129 / −196 lines.
@@ -124,19 +125,9 @@ report:
   `outputs/figures/fig6_all_models_learning_curves.*`.
 - **Figures.** `make_figures.py` — figures 1–5 (Macro F1 distribution,
   cross-domain scatter, per-class F1, variance, dataset distribution).
-- **Report.** `RESULTS.md` — consolidated benchmark tables and
-  figure references under the fixed-epoch protocol.
-- **CLI / demo extension.** Added the `roberta` option to `cli.py` and
-  `demo.py`, refactored `_get_bert()` to return a
-  `(model, dataset, use_token_types)` triple so the RoBERTa forward
-  path skips `token_type_ids`.
-- **Repository hygiene.** Moved superseded scripts to `experiments/`;
-  added function-level docstrings to every Part D script; rewrote
-  `README.md` sections 1–9 to match the four-model, two-domain
-  pipeline; loosened the `gradio` pin to `>=4.44` after the
-  Jinja2/Starlette compatibility fix.
-- `preload_hf.py` — retry-wrapped HuggingFace warm-up utility for slow
-  networks.
+- **Report.** Supplementary experiments (cross-domain, multi-seed,
+  learning curves) and detail refinements on top of Xinan Li's initial
+  report draft.
 
 ## How to verify
 
