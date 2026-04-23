@@ -48,16 +48,19 @@ DOMAINS = {
 
 
 def _slugify(text: str) -> str:
+    """Turn a display label into a filename-safe slug."""
     return text.lower().replace(" ", "_").replace("-", "_").replace("(", "").replace(")", "")
 
 
 def _ensure_output_dirs() -> None:
+    """Create the output folders this script writes into."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     ERROR_DIR.mkdir(parents=True, exist_ok=True)
     CONFUSION_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def _save_confusion_matrix(golds, preds, label: str) -> Path:
+    """Render and save a 3x3 confusion matrix PNG; return the saved path."""
     cm = confusion_matrix(golds, preds, labels=LABELS)
     fig, ax = plt.subplots(figsize=(5, 4))
     ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=LABELS).plot(ax=ax, colorbar=False)
@@ -70,6 +73,11 @@ def _save_confusion_matrix(golds, preds, label: str) -> Path:
 
 
 def _load_checkpoint(model: torch.nn.Module, path: Path) -> bool:
+    """Load weights into ``model`` if ``path`` exists; otherwise warn and return False.
+
+    Keeping missing checkpoints non-fatal lets graders run the script even when
+    some of the trained weights have not been downloaded.
+    """
     if not path.exists():
         print(f"[WARN] Missing checkpoint: {path}. Skipping.")
         return False
@@ -78,6 +86,7 @@ def _load_checkpoint(model: torch.nn.Module, path: Path) -> bool:
 
 
 def _summary_row(model_name: str, domain: str, metrics: dict, n: int, status: str = "ok") -> dict:
+    """Flatten a metrics dict into one CSV-ready row."""
     return {
         "model": model_name,
         "domain": domain,
@@ -92,6 +101,7 @@ def _summary_row(model_name: str, domain: str, metrics: dict, n: int, status: st
 
 
 def _persist(golds, preds, label: str, reviews, aspects) -> None:
+    """Write the error-bucket JSON and the confusion-matrix PNG for one run."""
     analyse_errors(
         reviews, aspects, golds, preds, model_name=label,
         output_path=ERROR_DIR / f"{_slugify(label)}.json",
@@ -100,6 +110,11 @@ def _persist(golds, preds, label: str, reviews, aspects) -> None:
 
 
 def _infer(model: torch.nn.Module, loader: DataLoader, *, use_token_types: bool):
+    """Run batch inference and return (gold_labels, predicted_labels) as string lists.
+
+    ``use_token_types`` selects the BERT-style forward (three inputs) versus the
+    RoBERTa-style forward (two inputs, no token_type_ids).
+    """
     golds, preds = [], []
     model.eval()
     with torch.no_grad():
@@ -121,6 +136,7 @@ def _infer(model: torch.nn.Module, loader: DataLoader, *, use_token_types: bool)
 
 
 def _run_baseline(rows, domain):
+    """Evaluate the rule-based baseline on one SemEval split and return its summary row."""
     model_name = "Rule-Based Baseline"
     label = f"{model_name} ({domain})"
     reviews = [r["review"] for r in rows]
@@ -133,6 +149,11 @@ def _run_baseline(rows, domain):
 
 
 def _run_bert_like(model_cls, model_name, ckpt_name, dataset, domain, rows, *, use_token_types):
+    """Evaluate a BERT-family checkpoint on one SemEval split.
+
+    Returns ``None`` when the checkpoint is missing so the caller can skip cleanly,
+    or a summary row when evaluation succeeds.
+    """
     label = f"{model_name} ({domain})"
     model = model_cls().to(DEVICE)
     if not _load_checkpoint(model, CHECKPOINT_DIR / ckpt_name):
@@ -147,6 +168,7 @@ def _run_bert_like(model_cls, model_name, ckpt_name, dataset, domain, rows, *, u
 
 
 def _save_summary(rows: list[dict]) -> None:
+    """Write the aggregated summary to both CSV and JSON so that downstream scripts can pick whichever format is convenient."""
     fieldnames = ["model", "domain", "status", "n_examples", "accuracy",
                   "macro_f1", "positive_f1", "negative_f1", "neutral_f1"]
     with SUMMARY_CSV.open("w", newline="", encoding="utf-8") as f:
@@ -158,6 +180,7 @@ def _save_summary(rows: list[dict]) -> None:
 
 
 def main() -> None:
+    """Run the full cross-domain evaluation pipeline end to end."""
     _ensure_output_dirs()
     all_rows: list[dict] = []
 

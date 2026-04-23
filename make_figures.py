@@ -80,6 +80,7 @@ plt.rcParams.update({
 
 
 def _load_full() -> list[dict]:
+    """Load the benchmark CSV as a list of rows with numeric fields cast to float."""
     with FULL_CSV.open(encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     # Drop val rows so downstream filters by in_domain / laptop / restaurant only.
@@ -120,6 +121,7 @@ def _load_baseline() -> dict:
 
 
 def _grouped(rows: list[dict]) -> dict[tuple[str, str], list[dict]]:
+    """Group rows by (model, domain) for quick lookup when plotting."""
     grouped: dict[tuple[str, str], list[dict]] = defaultdict(list)
     for r in rows:
         grouped[(r["model"], r["domain"])].append(r)
@@ -128,6 +130,7 @@ def _grouped(rows: list[dict]) -> dict[tuple[str, str], list[dict]]:
 
 # ──────────────────────────────────────────────────────────────────────────
 def fig1_macro_f1_distribution(rows, baseline):
+    """Render fig1: violin + strip plot of Macro F1 per (model, domain)."""
     grouped = _grouped(rows)
     fig, axes = plt.subplots(1, 3, figsize=(12, 4.2), sharey=True)
     positions = [1, 2, 3]
@@ -175,6 +178,7 @@ def fig1_macro_f1_distribution(rows, baseline):
 
 # ──────────────────────────────────────────────────────────────────────────
 def fig2_cross_domain_scatter(rows):
+    """Render fig2: in-domain vs cross-domain Macro F1 scatter with y=x reference."""
     grouped = _grouped(rows)
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.6), sharey=True, sharex=True)
     for ax, cross in zip(axes, ["laptop", "restaurant"]):
@@ -208,6 +212,7 @@ def fig2_cross_domain_scatter(rows):
 
 # ──────────────────────────────────────────────────────────────────────────
 def fig3_per_class_f1(rows, baseline):
+    """Render fig3: grouped per-class F1 bars (positive/negative/neutral) with 1-sigma error bars."""
     grouped = _grouped(rows)
     classes = [("positive_f1", "Positive F1"), ("negative_f1", "Negative F1"), ("neutral_f1", "Neutral F1")]
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.2), sharey=True)
@@ -256,6 +261,7 @@ def fig3_per_class_f1(rows, baseline):
 
 # ──────────────────────────────────────────────────────────────────────────
 def fig4_variance(rows):
+    """Render fig4: per-(model, domain) standard deviation of Macro F1 and Neutral F1."""
     grouped = _grouped(rows)
     metrics = [("macro_f1", "Macro F1"), ("neutral_f1", "Neutral F1")]
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
@@ -289,6 +295,7 @@ def fig4_variance(rows):
 
 # ──────────────────────────────────────────────────────────────────────────
 def fig5_data_distribution():
+    """Render fig5: sentiment-class pie charts for project data vs SemEval splits."""
     with SEMEVAL_STATS.open(encoding="utf-8") as f:
         stats = json.load(f)
     dataset_order = [
@@ -328,6 +335,7 @@ def fig5_data_distribution():
 
 
 def main() -> None:
+    """Regenerate all five report figures from the best-strategy CSV."""
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     rows = _load_full()
     baseline = _load_baseline()

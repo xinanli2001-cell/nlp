@@ -79,6 +79,7 @@ DOMAINS = {
 
 
 def set_seed(seed: int) -> None:
+    """Fix Python, NumPy and PyTorch RNGs so one seed reproduces the same run."""
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -87,6 +88,11 @@ def set_seed(seed: int) -> None:
 
 
 def forward(model, batch, use_tti):
+    """Call ``model`` with the right input arity for BERT vs RoBERTa.
+
+    BERT-family models take ``token_type_ids`` as the third argument;
+    RoBERTa does not. ``use_tti`` picks between the two call signatures.
+    """
     if use_tti:
         return model(
             batch["input_ids"].to(DEVICE),
@@ -97,6 +103,7 @@ def forward(model, batch, use_tti):
 
 
 def evaluate(model, loader, use_tti):
+    """Run inference over ``loader`` and return gold / prediction label lists."""
     model.eval()
     golds, preds = [], []
     with torch.no_grad():
@@ -108,6 +115,11 @@ def evaluate(model, loader, use_tti):
 
 
 def train_one(cfg: ModelConfig, seed: int, train_rows, val_rows):
+    """Train one (model, seed) run and save the best-val-macro-F1 checkpoint.
+
+    Returns ``(model, best_val_macro_f1, checkpoint_path)``. The model object is
+    loaded with the best state so the caller can evaluate without reloading.
+    """
     set_seed(seed)
     train_dl = DataLoader(cfg.dataset_cls(train_rows), batch_size=BATCH_SIZE, shuffle=True)
     val_dl = DataLoader(cfg.dataset_cls(val_rows), batch_size=BATCH_SIZE)
@@ -146,6 +158,7 @@ def train_one(cfg: ModelConfig, seed: int, train_rows, val_rows):
 
 
 def eval_all_domains(cfg, model, val_macro_f1, seed, domain_data):
+    """Evaluate one checkpoint on every domain in ``domain_data`` and build CSV rows."""
     rows = []
     for domain_name, rows_in_domain in domain_data.items():
         loader = DataLoader(cfg.dataset_cls(rows_in_domain), batch_size=32)
@@ -194,6 +207,7 @@ def _load_existing_rows() -> tuple[list[dict], set[tuple[str, int]]]:
 
 
 def main() -> None:
+    """Run the 20-seed x 3-model x 3-domain benchmark end to end (resumable)."""
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -247,6 +261,7 @@ def main() -> None:
 
 
 def _write_long_csv(rows: list[dict]) -> None:
+    """Persist ``rows`` as a long-format CSV (one line per model/seed/domain)."""
     if not rows:
         return
     fieldnames = list(rows[0].keys())
@@ -257,6 +272,7 @@ def _write_long_csv(rows: list[dict]) -> None:
 
 
 def _write_summary_json(rows: list[dict]) -> None:
+    """Write per-(model, domain) mean, stdev, min and max across seeds to JSON."""
     if not rows:
         return
     numeric_keys = ["val_macro_f1", "accuracy", "macro_f1",
