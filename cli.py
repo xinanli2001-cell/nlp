@@ -4,7 +4,7 @@ CLI for ABSA prediction.
 
 Usage:
   python cli.py --review "The battery life is great." --aspect battery --model extended
-  python cli.py --input_file data/final/test.csv --model bert --output results.csv
+  python cli.py --input_file data/final/test.csv --model roberta --output results.csv
 """
 
 import argparse
@@ -33,6 +33,12 @@ def _get_baseline() -> RuleBasedABSA:
 
 
 def _get_bert(model_name: str):
+    """Load a neural model (bert / extended / roberta) once and cache it.
+
+    Returns a ``(model, DatasetClass, use_token_types)`` triple. The boolean
+    tells the caller whether the model expects ``token_type_ids`` in its
+    forward pass (True for BERT-family, False for RoBERTa).
+    """
     if model_name not in _model_cache:
         if model_name == "bert":
             from src.models.bert_absa import BertABSA
@@ -45,7 +51,7 @@ def _get_bert(model_name: str):
                 )
             model = BertABSA().to(DEVICE)
             model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE))
-            _model_cache[model_name] = (model, ABSADataset)
+            _model_cache[model_name] = (model, ABSADataset, True)
         elif model_name == "extended":
             from src.models.extended_bert import ExtendedBertABSA
             from src.data.extended_dataset import ExtendedABSADataset
@@ -57,26 +63,54 @@ def _get_bert(model_name: str):
                 )
             model = ExtendedBertABSA().to(DEVICE)
             model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE))
-            _model_cache[model_name] = (model, ExtendedABSADataset)
+            _model_cache[model_name] = (model, ExtendedABSADataset, True)
+        elif model_name == "roberta":
+            from src.models.robertaabsa import RobertaABSA
+            from src.data.roberta_dataset import RobertaABSADataset
+            checkpoint_path = Path("checkpoints/roberta_absa_best.pt")
+            if not checkpoint_path.exists():
+                raise FileNotFoundError(
+                    "Missing checkpoint checkpoints/roberta_absa_best.pt. "
+                    "Train the model first or place the checkpoint in the checkpoints/ directory."
+                )
+            model = RobertaABSA().to(DEVICE)
+            model.load_state_dict(torch.load(checkpoint_path, map_location=DEVICE))
+            _model_cache[model_name] = (model, RobertaABSADataset, False)
         else:
-            raise ValueError(f"Unknown model: {model_name}. Choose: baseline, bert, extended")
+            raise ValueError(f"Unknown model: {model_name}. Choose: baseline, bert, extended, roberta")
     return _model_cache[model_name]
 
 
+def _forward(model, batch, use_token_types: bool):
+    """Call the model with BERT-family or RoBERTa-style forward signature."""
+    if use_token_types:
+        return model(
+            batch["input_ids"].to(DEVICE),
+            batch["attention_mask"].to(DEVICE),
+            batch["token_type_ids"].to(DEVICE),
+        )
+    return model(
+        batch["input_ids"].to(DEVICE),
+        batch["attention_mask"].to(DEVICE),
+    )
+
+
 def predict_single(review: str, aspect: str, model_name: str) -> str:
+    """Predict the sentiment of one (review, aspect) pair with the chosen model."""
     if model_name == "baseline":
         return _get_baseline().predict(review, aspect)
 
-    model, DatasetClass = _get_bert(model_name)
+    model, DatasetClass, use_tti = _get_bert(model_name)
     model.eval()
     ds = DatasetClass([{"review": review, "aspect": aspect, "sentiment": "positive"}])
     batch = next(iter(DataLoader(ds, batch_size=1)))
     with torch.no_grad():
-        logits = model(batch["input_ids"].to(DEVICE), batch["attention_mask"].to(DEVICE), batch["token_type_ids"].to(DEVICE))
+        logits = _forward(model, batch, use_tti)
     return ID2LABEL[logits.argmax(-1).item()]
 
 
 def predict_file(input_path: str, output_path: str, model_name: str) -> None:
+    """Read a CSV of (review, aspect) rows, append a ``predicted`` column, and save."""
     rows = load_csv(input_path)
     # Load model once, then run batch inference
     if model_name == "baseline":
@@ -84,7 +118,7 @@ def predict_file(input_path: str, output_path: str, model_name: str) -> None:
         for row in rows:
             row["predicted"] = bl.predict(row["review"], row["aspect"])
     else:
-        model, DatasetClass = _get_bert(model_name)
+        model, DatasetClass, use_tti = _get_bert(model_name)
         model.eval()
         # Reuse the training dataset for tokenization, but inference inputs
         # may not carry gold sentiments.
@@ -97,7 +131,7 @@ def predict_file(input_path: str, output_path: str, model_name: str) -> None:
         all_preds = []
         with torch.no_grad():
             for batch in dl:
-                logits = model(batch["input_ids"].to(DEVICE), batch["attention_mask"].to(DEVICE), batch["token_type_ids"].to(DEVICE))
+                logits = _forward(model, batch, use_tti)
                 all_preds += [ID2LABEL[i] for i in logits.argmax(-1).cpu().tolist()]
         for row, pred in zip(rows, all_preds):
             row["predicted"] = pred
@@ -116,7 +150,7 @@ def main():
     parser.add_argument("--input_file",  type=str, help="CSV file with review,aspect columns")
     parser.add_argument("--output",      type=str, default="predictions.csv")
     parser.add_argument("--model",       type=str, default="extended",
-                        choices=["baseline", "bert", "extended"],
+                        choices=["baseline", "bert", "extended", "roberta"],
                         help="Model to use (default: extended)")
     args = parser.parse_args()
 

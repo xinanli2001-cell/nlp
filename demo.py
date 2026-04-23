@@ -13,7 +13,7 @@ ASPECT_CHOICES = [
     "build_quality", "overall",
 ]
 
-MODEL_CHOICES = ["extended", "bert", "baseline"]
+MODEL_CHOICES = ["extended", "bert", "roberta", "baseline"]
 
 SENTIMENT_EMOJI = {
     "positive": "Positive",
