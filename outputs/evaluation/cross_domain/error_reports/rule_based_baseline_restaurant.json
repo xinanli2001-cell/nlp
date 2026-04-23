@@ -1,0 +1,97 @@
+{
+  "model_name": "Rule-Based Baseline (restaurant)",
+  "n_examples": 3602,
+  "total_errors": 1434,
+  "total_correct": 2168,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "implicit_aspect": {
+      "count": 1413,
+      "percentage": 98.5,
+      "examples": [
+        {
+          "review": "To be completely fair, the only redeeming factor was the food, which was above average, but couldn't make up for all the other deficiencies of Teodora.",
+          "aspect": "food",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "The food is uniformly exceptional, with a very capable kitchen which will proudly whip up whatever you feel like eating, whether it's on the menu or not.",
+          "aspect": "food",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "Our agreed favorite is the orrechiete with sausage and chicken (usually the waiters are kind enough to split the dish in half so you get to sample both meats).",
+          "aspect": "dish",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    },
+    "negation": {
+      "count": 8,
+      "percentage": 0.6,
+      "examples": [
+        {
+          "review": "The lobster sandwich is $24 and although it was good it was not nearly enough to warrant that price.",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "For the price, you cannot eat this well in Manhattan.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "Price no more than a Jersey deli but way better.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "negative"
+        }
+      ]
+    },
+    "other": {
+      "count": 12,
+      "percentage": 0.8,
+      "examples": [
+        {
+          "review": "The design and atmosphere is just as good.",
+          "aspect": "design",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "The price is reasonable although the service is poor.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "would have rather tried terrace in the sky or water club for that price",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "short_text": {
+      "count": 1,
+      "percentage": 0.1,
+      "examples": [
+        {
+          "review": "The price very reasonable.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        }
+      ]
+    }
+  }
+}

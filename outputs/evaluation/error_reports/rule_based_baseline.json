@@ -1,0 +1,121 @@
+{
+  "model_name": "Rule-Based Baseline",
+  "n_examples": 123,
+  "total_errors": 28,
+  "total_correct": 95,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "aspect_mismatch": {
+      "count": 4,
+      "percentage": 14.3,
+      "examples": [
+        {
+          "review": "she likes to read books and this is a fast and cheap way for her to do so",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "with a price tag of 59.99, this is one of the low-end tablets with a lot of features, but is certainly worth its price tag. but it definitely lacks the features and hd display of its high end variant fire hd.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "with a price tag of 59.99, this is one of the low-end tablets with a lot of features, but is certainly worth its price tag. but it definitely lacks the features and hd display of its high end variant fire hd.",
+          "aspect": "screen",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "implicit_aspect": {
+      "count": 6,
+      "percentage": 21.4,
+      "examples": [
+        {
+          "review": "the only draw back to this device is no internet service included. my 1 year old granddaugther loves hers and i don't leave home without it.",
+          "aspect": "connectivity",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "love amazon however their tablet limits you to using their browser and their apps. go online and you can get around them and download google and the playstore. made my fire into regular android tablet. much happier now.",
+          "aspect": "usability",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "love the tablet, not only for reading (upgrade from kindle) but for searching the internet, email, etc. and i can take it anywhere. cheaper than an ipad and does enough for what i need.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "negation": {
+      "count": 9,
+      "percentage": 32.1,
+      "examples": [
+        {
+          "review": "i really missed my first kindle when my husband gave me a fire 2 years ago. i love to read outside and could not do that with a fire. the voyage is perfect, easy to read anywhere, much longer battery life than a fire. very happy with it and the buttons are easy to use or you can just tap the screen to turn the page.",
+          "aspect": "battery",
+          "gold": "positive",
+          "pred": "negative"
+        },
+        {
+          "review": "i purchased this since i bought my grandson this tablet for christmas. the tablet is slow, considering price that's ok.i have problems with the charger, it won't charge when i am using the tablet, the charger needs to be plugged in and not moved for it to charge.for the price the tablet is ok.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "negative"
+        },
+        {
+          "review": "i purchased this since i bought my grandson this tablet for christmas. the tablet is slow, considering price that's ok.i have problems with the charger, it won't charge when i am using the tablet, the charger needs to be plugged in and not moved for it to charge.for the price the tablet is ok.",
+          "aspect": "battery",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "other": {
+      "count": 8,
+      "percentage": 28.6,
+      "examples": [
+        {
+          "review": "bought 2 of these for my 6 and 8 yr old and it said it came with 32gb storage but actual storage was a little less, cant remember exactly how much probably around 20gb with the other necessary programs that come already pre-installed. they mainly use it for games and have downloaded many games on them. there is room for external storage and it also has a front and rear camera. love the product. comes in different color as well. i got the blue!",
+          "aspect": "usability",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "use it in bathroom to listen to my amazon music and with alexa you can control it with just your voice",
+          "aspect": "usability",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "nice portable speaker but wish the sound quality was better.",
+          "aspect": "sound",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "sarcasm": {
+      "count": 1,
+      "percentage": 3.6,
+      "examples": [
+        {
+          "review": "i have a paper white 1 and 2. honestly it is difficult to justify double the price value. i certainly like most added features but not sure its worth the extra money. to note it operates great just not sure its worth an upgrade to the latest greatest.",
+          "aspect": "price",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    }
+  }
+}

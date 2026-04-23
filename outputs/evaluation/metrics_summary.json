@@ -1,0 +1,50 @@
+[
+  {
+    "model": "Rule-Based Baseline",
+    "status": "ok",
+    "n_examples": 123,
+    "accuracy": 0.7724,
+    "precision": 0.4739,
+    "recall": 0.5414,
+    "macro_f1": 0.4787,
+    "positive_f1": 0.8812,
+    "negative_f1": 0.381,
+    "neutral_f1": 0.1739
+  },
+  {
+    "model": "Standard BERT ABSA",
+    "status": "ok",
+    "n_examples": 123,
+    "accuracy": 0.9106,
+    "precision": 0.7076,
+    "recall": 0.6846,
+    "macro_f1": 0.6954,
+    "positive_f1": 0.9493,
+    "negative_f1": 0.7368,
+    "neutral_f1": 0.4
+  },
+  {
+    "model": "Extended BERT ABSA",
+    "status": "ok",
+    "n_examples": 123,
+    "accuracy": 0.8943,
+    "precision": 0.6878,
+    "recall": 0.742,
+    "macro_f1": 0.7015,
+    "positive_f1": 0.939,
+    "negative_f1": 0.7368,
+    "neutral_f1": 0.4286
+  },
+  {
+    "model": "RoBERTa ABSA",
+    "status": "ok",
+    "n_examples": 123,
+    "accuracy": 0.8455,
+    "precision": 0.6482,
+    "recall": 0.7568,
+    "macro_f1": 0.6476,
+    "positive_f1": 0.9126,
+    "negative_f1": 0.6667,
+    "neutral_f1": 0.3636
+  }
+]

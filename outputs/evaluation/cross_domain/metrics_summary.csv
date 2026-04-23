@@ -1,0 +1,9 @@
+model,domain,status,n_examples,accuracy,macro_f1,positive_f1,negative_f1,neutral_f1
+Rule-Based Baseline,laptop,ok,2313,0.5404,0.5144,0.6975,0.4842,0.3615
+Standard BERT ABSA,laptop,ok,2313,0.661,0.4942,0.7605,0.7093,0.0128
+Extended BERT ABSA,laptop,ok,2313,0.5499,0.4096,0.6472,0.5602,0.0215
+RoBERTa ABSA,laptop,ok,2313,0.6654,0.6493,0.7822,0.6955,0.4702
+Rule-Based Baseline,restaurant,ok,3602,0.6019,0.5199,0.7603,0.4114,0.3879
+Standard BERT ABSA,restaurant,ok,3602,0.6882,0.468,0.8131,0.5587,0.0322
+Extended BERT ABSA,restaurant,ok,3602,0.6455,0.3916,0.7809,0.3909,0.0031
+RoBERTa ABSA,restaurant,ok,3602,0.7032,0.6175,0.8335,0.5956,0.4234

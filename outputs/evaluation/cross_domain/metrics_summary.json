@@ -1,0 +1,90 @@
+[
+  {
+    "model": "Rule-Based Baseline",
+    "domain": "laptop",
+    "status": "ok",
+    "n_examples": 2313,
+    "accuracy": 0.5404,
+    "macro_f1": 0.5144,
+    "positive_f1": 0.6975,
+    "negative_f1": 0.4842,
+    "neutral_f1": 0.3615
+  },
+  {
+    "model": "Standard BERT ABSA",
+    "domain": "laptop",
+    "status": "ok",
+    "n_examples": 2313,
+    "accuracy": 0.661,
+    "macro_f1": 0.4942,
+    "positive_f1": 0.7605,
+    "negative_f1": 0.7093,
+    "neutral_f1": 0.0128
+  },
+  {
+    "model": "Extended BERT ABSA",
+    "domain": "laptop",
+    "status": "ok",
+    "n_examples": 2313,
+    "accuracy": 0.5499,
+    "macro_f1": 0.4096,
+    "positive_f1": 0.6472,
+    "negative_f1": 0.5602,
+    "neutral_f1": 0.0215
+  },
+  {
+    "model": "RoBERTa ABSA",
+    "domain": "laptop",
+    "status": "ok",
+    "n_examples": 2313,
+    "accuracy": 0.6654,
+    "macro_f1": 0.6493,
+    "positive_f1": 0.7822,
+    "negative_f1": 0.6955,
+    "neutral_f1": 0.4702
+  },
+  {
+    "model": "Rule-Based Baseline",
+    "domain": "restaurant",
+    "status": "ok",
+    "n_examples": 3602,
+    "accuracy": 0.6019,
+    "macro_f1": 0.5199,
+    "positive_f1": 0.7603,
+    "negative_f1": 0.4114,
+    "neutral_f1": 0.3879
+  },
+  {
+    "model": "Standard BERT ABSA",
+    "domain": "restaurant",
+    "status": "ok",
+    "n_examples": 3602,
+    "accuracy": 0.6882,
+    "macro_f1": 0.468,
+    "positive_f1": 0.8131,
+    "negative_f1": 0.5587,
+    "neutral_f1": 0.0322
+  },
+  {
+    "model": "Extended BERT ABSA",
+    "domain": "restaurant",
+    "status": "ok",
+    "n_examples": 3602,
+    "accuracy": 0.6455,
+    "macro_f1": 0.3916,
+    "positive_f1": 0.7809,
+    "negative_f1": 0.3909,
+    "neutral_f1": 0.0031
+  },
+  {
+    "model": "RoBERTa ABSA",
+    "domain": "restaurant",
+    "status": "ok",
+    "n_examples": 3602,
+    "accuracy": 0.7032,
+    "macro_f1": 0.6175,
+    "positive_f1": 0.8335,
+    "negative_f1": 0.5956,
+    "neutral_f1": 0.4234
+  }
+]

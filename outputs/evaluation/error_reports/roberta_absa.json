@@ -1,0 +1,91 @@
+{
+  "model_name": "RoBERTa ABSA",
+  "n_examples": 123,
+  "total_errors": 19,
+  "total_correct": 104,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "aspect_mismatch": {
+      "count": 1,
+      "percentage": 5.3,
+      "examples": [
+        {
+          "review": "with a price tag of 59.99, this is one of the low-end tablets with a lot of features, but is certainly worth its price tag. but it definitely lacks the features and hd display of its high end variant fire hd.",
+          "aspect": "screen",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "implicit_aspect": {
+      "count": 2,
+      "percentage": 10.5,
+      "examples": [
+        {
+          "review": "the only draw back to this device is no internet service included. my 1 year old granddaugther loves hers and i don't leave home without it.",
+          "aspect": "connectivity",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "i bought this tablet for myself because i bought the 8 gb one for my 6 year old and was so impressed with it that i bought myself the 16 gb one",
+          "aspect": "performance",
+          "gold": "positive",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "negation": {
+      "count": 5,
+      "percentage": 26.3,
+      "examples": [
+        {
+          "review": "music, full home automation control, an assistant, calling, shopping and lists, much much more...anywhere with wifi, home or away. get one, you will not regret it.",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "i purchased this since i bought my grandson this tablet for christmas. the tablet is slow, considering price that's ok.i have problems with the charger, it won't charge when i am using the tablet, the charger needs to be plugged in and not moved for it to charge.for the price the tablet is ok.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "negative"
+        },
+        {
+          "review": "i am a senior citizen who is not that great on computers or tablets, therefore, i need a book to help me understand how to do things on the tablet. i could not believe that this tablet did not come with an instruction booklet. it's taking me some time but i am learning how to get around this thing. that's why i can only give this product 4 stars instead of 5.",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "negative"
+        }
+      ]
+    },
+    "other": {
+      "count": 11,
+      "percentage": 57.9,
+      "examples": [
+        {
+          "review": "my first tablet. outstanding for netflix, email, etc.",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "i have one alexa and three echo dots and having echo show now is awesome!",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "recently upgraded from alexa 1st generation. really like the video screen and how much more it can do",
+          "aspect": "screen",
+          "gold": "positive",
+          "pred": "neutral"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "model_name": "Extended BERT ABSA (laptop)",
+  "n_examples": 2313,
+  "total_errors": 1041,
+  "total_correct": 1272,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "aspect_mismatch": {
+      "count": 1,
+      "percentage": 0.1,
+      "examples": [
+        {
+          "review": "Overall I feel this netbook was poor quality, had poor performance, although it did have great battery life when it did work.",
+          "aspect": "performance",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "implicit_aspect": {
+      "count": 985,
+      "percentage": 94.6,
+      "examples": [
+        {
+          "review": "I charge it at night and skip taking the cord with me because of the good battery life.",
+          "aspect": "cord",
+          "gold": "neutral",
+          "pred": "negative"
+        },
+        {
+          "review": "The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the \"sales\" team, which is the retail shop which I bought my netbook from.",
+          "aspect": "service_center",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the \"sales\" team, which is the retail shop which I bought my netbook from.",
+          "aspect": "\"sales\"_team",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "negation": {
+      "count": 13,
+      "percentage": 1.2,
+      "examples": [
+        {
+          "review": "My Toshiba did not have sound on everything, just certain things.",
+          "aspect": "sound",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "and looks very sexyy:D  really the mac book pro is the best laptop specially for students in college if you are not caring about price.",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "you can find many laptops with the same performance and even better with lower price, but you cannot find the look, easy, applications, and the experience in mac.",
+          "aspect": "performance",
+          "gold": "neutral",
+          "pred": "negative"
+        }
+      ]
+    },
+    "other": {
+      "count": 41,
+      "percentage": 3.9,
+      "examples": [
+        {
+          "review": "I took it back for an Asus and same thing- blue screen which required me to remove the battery to reset.",
+          "aspect": "battery",
+          "gold": "neutral",
+          "pred": "negative"
+        },
+        {
+          "review": "I also got the added bonus of a 30\" HD Monitor, which really helps to extend my screen and keep my eyes fresh!",
+          "aspect": "screen",
+          "gold": "neutral",
+          "pred": "positive"
+        },
+        {
+          "review": "My favorite part of this computer is that it has a vga port so I can connect it to a bigger screen.",
+          "aspect": "screen",
+          "gold": "neutral",
+          "pred": "negative"
+        }
+      ]
+    },
+    "sarcasm": {
+      "count": 1,
+      "percentage": 0.1,
+      "examples": [
+        {
+          "review": "The battery doesn't last long but I'm sure an upgrade battery would solve that problem.",
+          "aspect": "battery",
+          "gold": "positive",
+          "pred": "negative"
+        }
+      ]
+    }
+  }
+}

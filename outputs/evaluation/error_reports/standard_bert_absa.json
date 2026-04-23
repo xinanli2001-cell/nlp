@@ -1,0 +1,91 @@
+{
+  "model_name": "Standard BERT ABSA",
+  "n_examples": 123,
+  "total_errors": 11,
+  "total_correct": 112,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "implicit_aspect": {
+      "count": 2,
+      "percentage": 18.2,
+      "examples": [
+        {
+          "review": "my daughter loves this tablet. she drops it and it keeps going. she can't put it down.",
+          "aspect": "build_quality",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "i am a senior citizen who is not that great on computers or tablets, therefore, i need a book to help me understand how to do things on the tablet. i could not believe that this tablet did not come with an instruction booklet. it's taking me some time but i am learning how to get around this thing. that's why i can only give this product 4 stars instead of 5.",
+          "aspect": "usability",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "negation": {
+      "count": 5,
+      "percentage": 45.5,
+      "examples": [
+        {
+          "review": "music, full home automation control, an assistant, calling, shopping and lists, much much more...anywhere with wifi, home or away. get one, you will not regret it.",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "this is a superb tablet for the price. it doesn't come with the android operating system. it has amazon's operating system. the battery last a good long time and apps run very fast. i would recommend this to anyone who wants a tablet.",
+          "aspect": "battery",
+          "gold": "positive",
+          "pred": "negative"
+        },
+        {
+          "review": "love the bigger screen but do think this fire hd 10th runs a little slow. my last fire hd was not as slow.",
+          "aspect": "performance",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "other": {
+      "count": 3,
+      "percentage": 27.3,
+      "examples": [
+        {
+          "review": "amazon and philips hue work great together. very easy setup. the only drawback is using these bulbs on a non-philips dimmer switch. the bulbs flicker a bit, even when it's set to full on",
+          "aspect": "usability",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "nice portable speaker but wish the sound quality was better.",
+          "aspect": "sound",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "my husband is a truck driver and being on the road away from home, he likes to have shows and movies to watch. this has so much space for him to download things to watch.",
+          "aspect": "overall",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    },
+    "sarcasm": {
+      "count": 1,
+      "percentage": 9.1,
+      "examples": [
+        {
+          "review": "i have a paper white 1 and 2. honestly it is difficult to justify double the price value. i certainly like most added features but not sure its worth the extra money. to note it operates great just not sure its worth an upgrade to the latest greatest.",
+          "aspect": "price",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    }
+  }
+}

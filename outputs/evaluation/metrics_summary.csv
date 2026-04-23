@@ -1,0 +1,5 @@
+model,status,n_examples,accuracy,precision,recall,macro_f1,positive_f1,negative_f1,neutral_f1
+Rule-Based Baseline,ok,123,0.7724,0.4739,0.5414,0.4787,0.8812,0.381,0.1739
+Standard BERT ABSA,ok,123,0.9106,0.7076,0.6846,0.6954,0.9493,0.7368,0.4
+Extended BERT ABSA,ok,123,0.8943,0.6878,0.742,0.7015,0.939,0.7368,0.4286
+RoBERTa ABSA,ok,123,0.8455,0.6482,0.7568,0.6476,0.9126,0.6667,0.3636

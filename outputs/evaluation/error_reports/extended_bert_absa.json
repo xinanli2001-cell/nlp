@@ -1,0 +1,85 @@
+{
+  "model_name": "Extended BERT ABSA",
+  "n_examples": 123,
+  "total_errors": 13,
+  "total_correct": 110,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "implicit_aspect": {
+      "count": 1,
+      "percentage": 7.7,
+      "examples": [
+        {
+          "review": "i am a senior citizen who is not that great on computers or tablets, therefore, i need a book to help me understand how to do things on the tablet. i could not believe that this tablet did not come with an instruction booklet. it's taking me some time but i am learning how to get around this thing. that's why i can only give this product 4 stars instead of 5.",
+          "aspect": "usability",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "negation": {
+      "count": 6,
+      "percentage": 46.2,
+      "examples": [
+        {
+          "review": "music, full home automation control, an assistant, calling, shopping and lists, much much more...anywhere with wifi, home or away. get one, you will not regret it.",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "young kids love it, easy to use and takes a beating but still cheap enough that if it does happen to break you don't break the bank too",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "this is a superb tablet for the price. it doesn't come with the android operating system. it has amazon's operating system. the battery last a good long time and apps run very fast. i would recommend this to anyone who wants a tablet.",
+          "aspect": "battery",
+          "gold": "positive",
+          "pred": "negative"
+        }
+      ]
+    },
+    "other": {
+      "count": 5,
+      "percentage": 38.5,
+      "examples": [
+        {
+          "review": "bought for a family memeber and he was so happy with the game",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "last christmas i gave my nephew a fire stick, which he loved. in the meantime, i purchased an amazon tap for myself. since he likes gadgets, i knew he would want one. so i purchased it for him",
+          "aspect": "overall",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "nice portable speaker but wish the sound quality was better.",
+          "aspect": "sound",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "sarcasm": {
+      "count": 1,
+      "percentage": 7.7,
+      "examples": [
+        {
+          "review": "i have a paper white 1 and 2. honestly it is difficult to justify double the price value. i certainly like most added features but not sure its worth the extra money. to note it operates great just not sure its worth an upgrade to the latest greatest.",
+          "aspect": "price",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    }
+  }
+}

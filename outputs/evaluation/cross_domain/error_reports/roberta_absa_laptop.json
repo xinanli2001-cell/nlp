@@ -1,0 +1,121 @@
+{
+  "model_name": "RoBERTa ABSA (laptop)",
+  "n_examples": 2313,
+  "total_errors": 774,
+  "total_correct": 1539,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "aspect_mismatch": {
+      "count": 6,
+      "percentage": 0.8,
+      "examples": [
+        {
+          "review": "I bought this laptop because of the performance to price ratio.",
+          "aspect": "performance",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "I bought this laptop because of the performance to price ratio.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "The large screen also helps when you are working in design based programs like Adobe Creative Suite.",
+          "aspect": "screen",
+          "gold": "positive",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "implicit_aspect": {
+      "count": 724,
+      "percentage": 93.5,
+      "examples": [
+        {
+          "review": "I charge it at night and skip taking the cord with me because of the good battery life.",
+          "aspect": "cord",
+          "gold": "neutral",
+          "pred": "positive"
+        },
+        {
+          "review": "The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the \"sales\" team, which is the retail shop which I bought my netbook from.",
+          "aspect": "service_center",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the \"sales\" team, which is the retail shop which I bought my netbook from.",
+          "aspect": "\"sales\"_team",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "negation": {
+      "count": 14,
+      "percentage": 1.8,
+      "examples": [
+        {
+          "review": "I gave it to my daughter because I just hated the screen, hated that it had no cd drive to at least play cd's when I wanted to listen to music and do schoolwork.",
+          "aspect": "screen",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "My Toshiba did not have sound on everything, just certain things.",
+          "aspect": "sound",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "and looks very sexyy:D  really the mac book pro is the best laptop specially for students in college if you are not caring about price.",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "other": {
+      "count": 29,
+      "percentage": 3.7,
+      "examples": [
+        {
+          "review": "I took it back for an Asus and same thing- blue screen which required me to remove the battery to reset.",
+          "aspect": "battery",
+          "gold": "neutral",
+          "pred": "negative"
+        },
+        {
+          "review": "I also got the added bonus of a 30\" HD Monitor, which really helps to extend my screen and keep my eyes fresh!",
+          "aspect": "screen",
+          "gold": "neutral",
+          "pred": "positive"
+        },
+        {
+          "review": "Like the price and operation.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "sarcasm": {
+      "count": 1,
+      "percentage": 0.1,
+      "examples": [
+        {
+          "review": "The battery doesn't last long but I'm sure an upgrade battery would solve that problem.",
+          "aspect": "battery",
+          "gold": "positive",
+          "pred": "negative"
+        }
+      ]
+    }
+  }
+}

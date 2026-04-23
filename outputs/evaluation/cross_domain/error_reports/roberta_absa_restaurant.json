@@ -1,0 +1,85 @@
+{
+  "model_name": "RoBERTa ABSA (restaurant)",
+  "n_examples": 3602,
+  "total_errors": 1069,
+  "total_correct": 2533,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "aspect_mismatch": {
+      "count": 1,
+      "percentage": 0.1,
+      "examples": [
+        {
+          "review": "Price and quality of fish alone will keep us from making a return visit.",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "implicit_aspect": {
+      "count": 1063,
+      "percentage": 99.4,
+      "examples": [
+        {
+          "review": "To be completely fair, the only redeeming factor was the food, which was above average, but couldn't make up for all the other deficiencies of Teodora.",
+          "aspect": "food",
+          "gold": "positive",
+          "pred": "negative"
+        },
+        {
+          "review": "The food is uniformly exceptional, with a very capable kitchen which will proudly whip up whatever you feel like eating, whether it's on the menu or not.",
+          "aspect": "menu",
+          "gold": "neutral",
+          "pred": "positive"
+        },
+        {
+          "review": "Our agreed favorite is the orrechiete with sausage and chicken (usually the waiters are kind enough to split the dish in half so you get to sample both meats).",
+          "aspect": "meats",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    },
+    "negation": {
+      "count": 1,
+      "percentage": 0.1,
+      "examples": [
+        {
+          "review": "This place doesn't compare with Mamoun's in terms of price, freshness, value, and consisent quality, but that's just my opinion.",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "other": {
+      "count": 4,
+      "percentage": 0.4,
+      "examples": [
+        {
+          "review": "would have rather tried terrace in the sky or water club for that price",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "The food is reliable and the price is moderate.",
+          "aspect": "price",
+          "gold": "neutral",
+          "pred": "positive"
+        },
+        {
+          "review": "Over price, and small portions .",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    }
+  }
+}

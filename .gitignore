@@ -26,3 +26,8 @@ outputs/evaluation/*
 !outputs/evaluation/all_models_curves/
 !outputs/evaluation/best_strategy/
 !outputs/evaluation/roberta_improved/
+!outputs/evaluation/confusion_matrices/
+!outputs/evaluation/cross_domain/
+!outputs/evaluation/error_reports/
+!outputs/evaluation/metrics_summary.csv
+!outputs/evaluation/metrics_summary.json

@@ -1,0 +1,151 @@
+{
+  "model_name": "Rule-Based Baseline (laptop)",
+  "n_examples": 2313,
+  "total_errors": 1063,
+  "total_correct": 1250,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "aspect_mismatch": {
+      "count": 13,
+      "percentage": 1.2,
+      "examples": [
+        {
+          "review": "I've been impressed with the battery life and the performance for such a small amount of memory.",
+          "aspect": "performance",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "From the build quality to the performance, everything about it has been sub-par from what I would have expected from Apple.",
+          "aspect": "build_quality",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "From the build quality to the performance, everything about it has been sub-par from what I would have expected from Apple.",
+          "aspect": "performance",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "implicit_aspect": {
+      "count": 962,
+      "percentage": 90.5,
+      "examples": [
+        {
+          "review": "The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the \"sales\" team, which is the retail shop which I bought my netbook from.",
+          "aspect": "service_center",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the \"sales\" team, which is the retail shop which I bought my netbook from.",
+          "aspect": "\"sales\"_team",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "it is of high quality, has a killer GUI, is extremely stable, is highly expandable, is bundled with lots of very good applications, is easy to use, and is absolutely gorgeous.",
+          "aspect": "quality",
+          "gold": "positive",
+          "pred": "negative"
+        }
+      ]
+    },
+    "negation": {
+      "count": 26,
+      "percentage": 2.4,
+      "examples": [
+        {
+          "review": "And not to mention after using it for a few months or so, the battery will slowly less and less hold a charge until you can't leave it unplugged for more than 5 minutes without the thing dying.",
+          "aspect": "battery",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "Well I spilled something on it and they replaced it with this model, which gets hot and the battery doesn't make it through 1 DVD.",
+          "aspect": "battery",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "I would not recommend this to anyone wanting a notebook expecting the performance of a Desktop it does not meet the expectations.",
+          "aspect": "performance",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "other": {
+      "count": 57,
+      "percentage": 5.4,
+      "examples": [
+        {
+          "review": "I also got the added bonus of a 30\" HD Monitor, which really helps to extend my screen and keep my eyes fresh!",
+          "aspect": "screen",
+          "gold": "neutral",
+          "pred": "positive"
+        },
+        {
+          "review": "The best thing about this laptop is the price along with some of the newer features.",
+          "aspect": "price",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "2 months later, the battery went.",
+          "aspect": "battery",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    },
+    "sarcasm": {
+      "count": 3,
+      "percentage": 0.3,
+      "examples": [
+        {
+          "review": "The battery doesn't last long but I'm sure an upgrade battery would solve that problem.",
+          "aspect": "battery",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "The battery doesn't last long but I'm sure an upgrade battery would solve that problem.",
+          "aspect": "battery",
+          "gold": "positive",
+          "pred": "neutral"
+        },
+        {
+          "review": "Without a doubt, the *design* of this laptop is fantastic.",
+          "aspect": "design",
+          "gold": "positive",
+          "pred": "negative"
+        }
+      ]
+    },
+    "short_text": {
+      "count": 2,
+      "percentage": 0.2,
+      "examples": [
+        {
+          "review": "Just a black screen!",
+          "aspect": "screen",
+          "gold": "negative",
+          "pred": "neutral"
+        },
+        {
+          "review": "the battery is irreplaceable.",
+          "aspect": "battery",
+          "gold": "negative",
+          "pred": "neutral"
+        }
+      ]
+    }
+  }
+}

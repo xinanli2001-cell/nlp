@@ -1,0 +1,85 @@
+{
+  "model_name": "Extended BERT ABSA (restaurant)",
+  "n_examples": 3602,
+  "total_errors": 1277,
+  "total_correct": 2325,
+  "labels": [
+    "positive",
+    "negative",
+    "neutral"
+  ],
+  "breakdown": {
+    "implicit_aspect": {
+      "count": 1264,
+      "percentage": 99.0,
+      "examples": [
+        {
+          "review": "But the staff was so horrible to us.",
+          "aspect": "staff",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "To be completely fair, the only redeeming factor was the food, which was above average, but couldn't make up for all the other deficiencies of Teodora.",
+          "aspect": "food",
+          "gold": "positive",
+          "pred": "negative"
+        },
+        {
+          "review": "The food is uniformly exceptional, with a very capable kitchen which will proudly whip up whatever you feel like eating, whether it's on the menu or not.",
+          "aspect": "menu",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    },
+    "negation": {
+      "count": 5,
+      "percentage": 0.4,
+      "examples": [
+        {
+          "review": "The lobster sandwich is $24 and although it was good it was not nearly enough to warrant that price.",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "Sushi wasn't anything spectacular for the price.",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "Definitely not worth the price!",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        }
+      ]
+    },
+    "other": {
+      "count": 8,
+      "percentage": 0.6,
+      "examples": [
+        {
+          "review": "would have rather tried terrace in the sky or water club for that price",
+          "aspect": "price",
+          "gold": "negative",
+          "pred": "positive"
+        },
+        {
+          "review": "I had the salmon dish and while it was fine, for the price paid, I expected it to have some type of flavor.",
+          "aspect": "price",
+          "gold": "neutral",
+          "pred": "positive"
+        },
+        {
+          "review": "The food is reliable and the price is moderate.",
+          "aspect": "price",
+          "gold": "neutral",
+          "pred": "positive"
+        }
+      ]
+    }
+  }
+}
