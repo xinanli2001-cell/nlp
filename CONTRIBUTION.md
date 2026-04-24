@@ -20,7 +20,7 @@ main ────────── initial scaffold and baseline system
 
 ## Members
 
-### Xinan Li — GitHub author: 李欣桉 `<z5549727@ad.unsw.edu.au>`
+### Xinan Li — GitHub author: Alex-li `<z5549727@ad.unsw.edu.au>`
 
 Branch: `main`. 15 commits, roughly +3,657 / −832 lines.
 
